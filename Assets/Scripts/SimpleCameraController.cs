@@ -8,6 +8,11 @@ using UnityEngine;
 
 namespace UnityTemplateProjects
 {
+    /**
+     *  @brief Простой контроллер камеры.
+     *
+     *  Хранит в себе информацию о текущем состоянии камеры и имеет расширенные настройки.
+     */
     public class SimpleCameraController : MonoBehaviour
     {
         class CameraState
