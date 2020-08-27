@@ -25,4 +25,9 @@ public class RTUI : MonoBehaviour
     {
         GameManager.ResumeGame();
     }
+
+    public void GoToMainMenu()
+    {
+        GameManager.GoToMainMenu();
+    }
 }

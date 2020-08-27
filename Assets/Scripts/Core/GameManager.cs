@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,5 +30,10 @@ public class GameManager : MonoBehaviour
     {
         instance.RTUI.ClosePauseMenu();
         instance.isPaused = false;
+    }
+
+    public static void GoToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }
