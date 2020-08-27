@@ -681,6 +681,7 @@ MonoBehaviour:
   observingAngle: 35
   observingDistance: 20
   observingYaw: 0
+  rotationSpeed: 90
 --- !u!1 &694039609
 GameObject:
   m_ObjectHideFlags: 0

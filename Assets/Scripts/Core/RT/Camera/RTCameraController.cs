@@ -10,6 +10,9 @@ public class RTCameraController : MonoBehaviour
 
     public float observingYaw = 0.0f;
 
+    public float rotationSpeed = 30.0f; // degrees / sec
+    public float zoomSpeed = 4.0f;
+
 
     private void FixedUpdate()
     {
@@ -25,11 +28,11 @@ public class RTCameraController : MonoBehaviour
     {
         if (Input.GetMouseButton(1))
         {
-            float dx = Input.GetAxis("Mouse X");
+            float dx = Input.GetAxis("Mouse X") * rotationSpeed * Time.fixedDeltaTime;
             transform.RotateAround(followingObject.position, Vector3.up, dx);
             observingYaw += dx;
 
-            float dy = Input.GetAxis("Mouse Y");
+            float dy = Input.GetAxis("Mouse Y") * rotationSpeed * Time.fixedDeltaTime;
             observingAngle -= dy;
             observingAngle = Mathf.Clamp(observingAngle, 15.0f, 75.0f);
         }
@@ -58,7 +61,7 @@ public class RTCameraController : MonoBehaviour
     private void UpdateCameraZoom()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        observingDistance -= 4.0f * scroll;
+        observingDistance -= zoomSpeed * scroll;
         observingDistance = Mathf.Max(2.0f, observingDistance);
     }
 }
