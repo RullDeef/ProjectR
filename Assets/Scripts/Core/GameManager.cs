@@ -1,18 +1,31 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum GamingState
+{
+    RealTime,
+    Fight
+}
+
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance;
     public RTUI RTUI;
+    public FightUI fightUI;
+
+    public GamingState gamingState;
     private bool isPaused = false;
 
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
+        instance = this;
+        RTUI = FindObjectOfType<RTUI>();
+        fightUI = FindObjectOfType<FightUI>();
+
+        if (RTUI != null)
+            gamingState = GamingState.RealTime;
         else
-            Destroy(gameObject);
+            gamingState = GamingState.Fight;
     }
 
     public static bool IsPaused()
@@ -23,12 +36,20 @@ public class GameManager : MonoBehaviour
     public static void PauseGame()
     {
         instance.isPaused = true;
-        instance.RTUI.OpenPauseMenu();
+
+        if (instance.gamingState == GamingState.RealTime)
+            instance.RTUI.OpenPauseMenu();
+        else
+            instance.fightUI.OpenPauseMenu();
     }
 
     public static void ResumeGame()
     {
-        instance.RTUI.ClosePauseMenu();
+        if (instance.gamingState == GamingState.RealTime)
+            instance.RTUI.ClosePauseMenu();
+        else
+            instance.fightUI.ClosePauseMenu();
+        
         instance.isPaused = false;
     }
 
