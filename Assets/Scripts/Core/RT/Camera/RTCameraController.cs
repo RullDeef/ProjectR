@@ -16,6 +16,9 @@ public class RTCameraController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.IsPaused())
+            return;
+        
         if (followingObject != null)
         {
             UpdateCameraPosition();

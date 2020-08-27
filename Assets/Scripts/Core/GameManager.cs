@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance { get; private set; }
+    private static GameManager instance;
     public RTUI RTUI;
-    public bool isPaused { get; private set; }
+    private bool isPaused = false;
 
     private void Awake()
     {
@@ -14,6 +14,11 @@ public class GameManager : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);
+    }
+
+    public static bool IsPaused()
+    {
+        return instance.isPaused;
     }
 
     public static void PauseGame()

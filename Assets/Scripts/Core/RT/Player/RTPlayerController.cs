@@ -20,6 +20,9 @@ namespace Core.RT.Player
 
         void FixedUpdate()
         {
+            if (GameManager.IsPaused())
+                return;
+
             float dHor = Input.GetAxis("Horizontal");
             float dVer = Input.GetAxis("Vertical");
 
