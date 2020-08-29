@@ -8,8 +8,8 @@ namespace Core.RT
 
         public override void Interact()
         {
-            RTManager.GetPlayerInventory().AddItem(item);
             Debug.Log("Picked!");
+            RTManager.GetPlayerInventory().AddItem(item);
             Destroy(gameObject);
         }
     }

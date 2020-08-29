@@ -6,5 +6,6 @@ namespace Core.Inventory
     public class Item : ScriptableObject
     {
         public new string name;
+        public Texture slotIcon;
     }
 }
