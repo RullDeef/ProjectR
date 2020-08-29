@@ -5,6 +5,7 @@ namespace Core
     public class RTUI : MonoBehaviour
     {
         public GameObject pauseMenu;
+        public GameObject inventoryMenu;
 
         public void OpenPauseMenu()
         {
@@ -29,6 +30,21 @@ namespace Core
         public void GoToMainMenu()
         {
             GameManager.GoToMainMenu();
+        }
+
+        public bool IsInventoryOpen()
+        {
+            return inventoryMenu.activeSelf;
+        }
+
+        public void OpenInventory()
+        {
+            inventoryMenu.SetActive(true);
+        }
+
+        public void CloseInventory()
+        {
+            inventoryMenu.SetActive(false);
         }
     }
 }

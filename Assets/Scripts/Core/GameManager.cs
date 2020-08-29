@@ -12,10 +12,15 @@ namespace Core
     public class GameManager : MonoBehaviour
     {
         private static GameManager instance;
+
         public RTUI RTUI;
         public FightUI fightUI;
 
         public GamingState gamingState;
+
+        [SerializeField]
+        private Transform player = null;
+
         private bool isPaused = false;
 
         private void Awake()
@@ -28,6 +33,27 @@ namespace Core
                 gamingState = GamingState.RealTime;
             else
                 gamingState = GamingState.Fight;
+        }
+
+        private void Update()
+        {
+            // check for inventory key pressed
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                if (gamingState == GamingState.RealTime)
+                {
+                    if (RTUI.IsInventoryOpen())
+                    {
+                        RTUI.CloseInventory();
+                        player.GetComponent<RT.Player.RTPlayerController>().ActivateControlls();
+                    }
+                    else
+                    {
+                        player.GetComponent<RT.Player.RTPlayerController>().DeactivateControlls();
+                        RTUI.OpenInventory();
+                    }
+                }
+            }
         }
 
         public static bool IsPaused()
@@ -58,6 +84,11 @@ namespace Core
         public static void GoToMainMenu()
         {
             SceneManager.LoadScene("MainMenu");
+        }
+
+        public static Transform GetPlayer()
+        {
+            return instance.player;
         }
     }
 }
