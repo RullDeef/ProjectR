@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MMUI : MonoBehaviour
+namespace Core
 {
-    public void StartGame()
+    public class MMUI : MonoBehaviour
     {
-        SceneManager.LoadScene("DemoGameScene");
-    }
+        public void StartGame()
+        {
+            SceneManager.LoadScene("DemoGameScene");
+        }
 
-    public void ExitGame()
-    {
-        Application.Quit();
+        public void ExitGame()
+        {
+            Application.Quit();
+        }
     }
 }

@@ -1,25 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class HexCell : MonoBehaviour
+namespace Core.Fight
 {
-    private List<HexCell> neighbors;
-
-    private void Awake()
+    public class HexCell : MonoBehaviour
     {
-        FindNeighbors();
-    }
+        private List<HexCell> neighbors;
 
-    private void FindNeighbors()
-    {
-        neighbors = new List<HexCell>();
-
-        foreach (HexCell cell in transform.parent.GetComponentsInChildren<HexCell>())
+        private void Awake()
         {
-            if (cell != this && Vector3.Distance(transform.position, cell.transform.position) <= 2.1f)
+            FindNeighbors();
+        }
+
+        private void FindNeighbors()
+        {
+            neighbors = new List<HexCell>();
+
+            foreach (HexCell cell in transform.parent.GetComponentsInChildren<HexCell>())
             {
-                neighbors.Add(cell.GetComponent)
+                if (cell != this && Vector3.Distance(transform.position, cell.transform.position) <= 2.1f)
+                {
+                    neighbors.Add(cell);
+                }
             }
         }
     }

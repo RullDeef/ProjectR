@@ -2,27 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FightUI : MonoBehaviour
+namespace Core
 {
-    public GameObject pauseMenu;
-
-    public void OpenPauseMenu()
+    public class FightUI : MonoBehaviour
     {
-        pauseMenu.SetActive(true);
-    }
+        public GameObject pauseMenu;
 
-    public void ClosePauseMenu()
-    {
-        pauseMenu.SetActive(false);
-    }
+        public void OpenPauseMenu()
+        {
+            pauseMenu.SetActive(true);
+        }
 
-    public void PauseGame()
-    {
-        GameManager.PauseGame();
-    }
+        public void ClosePauseMenu()
+        {
+            pauseMenu.SetActive(false);
+        }
 
-    public void ResumeGame()
-    {
-        GameManager.ResumeGame();
+        public void PauseGame()
+        {
+            GameManager.PauseGame();
+        }
+
+        public void ResumeGame()
+        {
+            GameManager.ResumeGame();
+        }
     }
 }
