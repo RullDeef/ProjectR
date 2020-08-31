@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Rock
   m_EditorClassIdentifier: 
   name: rock
+  slotIcon: {fileID: 2800000, guid: 6bcebf567df106e428f9e21353cd8304, type: 3}
