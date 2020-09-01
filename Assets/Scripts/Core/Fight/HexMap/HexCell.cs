@@ -3,13 +3,29 @@ using UnityEngine;
 
 namespace Core.Fight
 {
+    public enum HexCellType
+    {
+        Empty,
+        Ground,
+        Wind /* ??? */
+    }
+
     public class HexCell : MonoBehaviour
     {
+        public HexMap hexMap;
+        public bool walkable = true; // true if any unit can be placed inside this cell
+
+
         private List<HexCell> neighbors;
 
         private void Awake()
         {
             FindNeighbors();
+        }
+
+        void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawWireSphere(transform.position, 1);
         }
 
         private void FindNeighbors()
