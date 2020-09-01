@@ -43,7 +43,12 @@ namespace Utils.FSM
 
         private State activeState = null;
 
-        public void AddState(string name, Action action)
+        public void AddState(string name, Action actionStay)
+        {
+            AddState(name, () => {}, actionStay, () => {});
+        }
+
+        public void AddState(string name, Action actionEnter, Action actionStay, Action actionExit)
         {
             foreach (State st in states)
                 if (st.name == name)
@@ -51,7 +56,9 @@ namespace Utils.FSM
             
             State state = new State();
             state.name = name;
-            state.action = action;
+            state.actionEnter = actionEnter;
+            state.actionStay = actionStay;
+            state.actionExit = actionExit;
             states.Add(state);
         }
 
@@ -75,7 +82,7 @@ namespace Utils.FSM
 
         public void SetActiveState(string name)
         {
-            activeState = GetState(name);
+            SetActiveState(GetState(name));
         }
 
         public void Update()
@@ -83,13 +90,13 @@ namespace Utils.FSM
             if (activeState == null)
                 throw new ActiveStateNotSetException();
 
-            activeState.action();
+            activeState.actionStay();
 
             foreach (Transition transition in anyTransitions)
             {
                 if (transition.condition())
                 {
-                    activeState = transition.stateTo;
+                    SetActiveState(transition.stateTo);
                     return;
                 }
             }
@@ -98,7 +105,7 @@ namespace Utils.FSM
             {
                 if (transition.condition())
                 {
-                    activeState = transition.stateTo;
+                    SetActiveState(transition.stateTo);
                     return;
                 }
             }
@@ -112,10 +119,25 @@ namespace Utils.FSM
             throw new StateDoesNotExistException();
         }
 
+        private void SetActiveState(State state)
+        {
+            if (activeState == state)
+                return;
+            
+            if (activeState != null)
+            {
+                activeState.actionExit();
+            }
+            activeState = state;
+            activeState.actionEnter();
+        }
+
         private class State
         {
             public string name;
-            public Action action;
+            public Action actionEnter;
+            public Action actionStay;
+            public Action actionExit;
 
             public List<Transition> transitions;
         }
