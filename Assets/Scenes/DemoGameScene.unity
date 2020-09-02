@@ -2290,7 +2290,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3374262642116648645}
-  m_Mesh: {fileID: 775409150722507249, guid: c5b3ce6f3e201ff4a83cc9feec75b3d3, type: 3}
+  m_Mesh: {fileID: 4300000, guid: d8ea93d2d4757e444a5349f4bc849128, type: 3}
 --- !u!23 &6665842500974916103
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2339,6 +2339,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1559528493572132855, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2333585874590897657, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
       propertyPath: cellsCount.x
       value: 6
@@ -2346,6 +2350,30 @@ PrefabInstance:
     - target: {fileID: 2333585874590897657, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
       propertyPath: cellsCount.y
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333585874590897657, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
+      propertyPath: startingOffset.x
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333585874590897657, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
+      propertyPath: startingOffset.y
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 7530244043106643505, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 338088122}
+    - target: {fileID: 7530244043106643505, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseInventory
+      objectReference: {fileID: 0}
+    - target: {fileID: 7530244043106643505, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Core.GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7530244043106643505, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7915445122051479474, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
@@ -2438,6 +2466,10 @@ PrefabInstance:
     - target: {fileID: 7915445122051479479, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
       propertyPath: m_Name
       value: RTUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8363777565824533435, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8747047998107076716, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
       propertyPath: m_AnchoredPosition.x

@@ -44,13 +44,11 @@ namespace Core
                 {
                     if (RTUI.IsInventoryOpen())
                     {
-                        RTUI.CloseInventory();
-                        player.GetComponent<RT.Player.RTPlayerController>().ActivateControlls();
+                        CloseInventory();
                     }
                     else
                     {
-                        player.GetComponent<RT.Player.RTPlayerController>().DeactivateControlls();
-                        RTUI.OpenInventory();
+                        OpenInventory();
                     }
                 }
             }
@@ -89,6 +87,18 @@ namespace Core
         public static Transform GetPlayer()
         {
             return instance.player;
+        }
+
+        public void OpenInventory()
+        {
+            player.GetComponent<RT.Player.RTPlayerController>().DeactivateControlls();
+            RTUI.OpenInventory();
+        }
+
+        public void CloseInventory()
+        {
+            RTUI.CloseInventory();
+            player.GetComponent<RT.Player.RTPlayerController>().ActivateControlls();
         }
     }
 }

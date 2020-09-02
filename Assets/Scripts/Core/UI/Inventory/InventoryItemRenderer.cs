@@ -10,12 +10,15 @@ namespace UI.Inventory
         public Vector2Int startingOffset = new Vector2Int(16, 16);
         public Vector2Int spacing = new Vector2Int(8, 8);
 
+        public Vector2 cellSize; // размер ячейки, зависит от префаба слота (ItemSlot)
+
         public GameObject emptyCell;
 
         private GameObject[,] cells;
 
         private void Awake()
         {
+            cellSize = emptyCell.GetComponent<RectTransform>().rect.size;
             InitItemCells();
             Core.RTManager.GetPlayerInventory().OnItemsUpdateCallback += UpdateInventoryItems;
         }
@@ -23,13 +26,14 @@ namespace UI.Inventory
         private void InitItemCells()
         {
             cells = new GameObject[cellsCount.x, cellsCount.y];
+            Transform parent = transform.Find("Items");
 
             for (int row = 0; row < cellsCount.x; row++)
             for (int col = 0; col < cellsCount.y; col++)
             {
                 // TODO: hardcoded cell size (64, 64)
-                Vector3 pos = new Vector3(startingOffset.x + row * (64 + spacing.x), -(startingOffset.y + col * (64 + spacing.y)), 0);
-                cells[row, col] = Instantiate(emptyCell, pos, Quaternion.identity, transform);
+                Vector3 pos = new Vector3(startingOffset.x + row * (cellSize.x + spacing.x), -(startingOffset.y + col * (cellSize.y + spacing.y)), 0);
+                cells[row, col] = Instantiate(emptyCell, pos, Quaternion.identity, parent);
                 // cells[row, col].transform.SetParent(transform, false);
                 cells[row, col].GetComponent<RectTransform>().anchoredPosition = pos;
             }
