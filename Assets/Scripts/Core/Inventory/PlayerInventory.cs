@@ -9,6 +9,7 @@ namespace Core.Inventory
         public delegate void OnItemsUpdate(PlayerInventory inventory, List<Item> newItems);
         public OnItemsUpdate OnItemsUpdateCallback;
 
+        //Dictionary<int, Item> items; // индекс в инвентаре и сам итем
         [SerializeField]
         private List<Item> items;
 

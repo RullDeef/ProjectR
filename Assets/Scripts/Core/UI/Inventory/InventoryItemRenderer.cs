@@ -6,58 +6,46 @@ namespace UI.Inventory
 {
     public class InventoryItemRenderer : MonoBehaviour
     {
-        public Vector2Int cellsCount = new Vector2Int(8, 6);
-        public Vector2Int startingOffset = new Vector2Int(16, 16);
-        public Vector2Int spacing = new Vector2Int(8, 8);
+        public int cellsCount = 32;
+        public InventoryCell emptyCell;
+        private List<InventoryCell> cells;
+        public Transform _container, _draggingParent;
 
-        public Vector2 cellSize; // размер ячейки, зависит от префаба слота (ItemSlot)
-
-        public GameObject emptyCell;
-
-        private GameObject[,] cells;
-
-        private void Awake()
+        private void Start() // подождать Awake у инвентаря плеера
         {
-            cellSize = emptyCell.GetComponent<RectTransform>().rect.size;
             InitItemCells();
             Core.RTManager.GetPlayerInventory().OnItemsUpdateCallback += UpdateInventoryItems;
+            gameObject.SetActive(false); // временный фикс
         }
 
         private void InitItemCells()
         {
-            cells = new GameObject[cellsCount.x, cellsCount.y];
-            Transform parent = transform.Find("Items");
+            cells = new List<InventoryCell>();
+            InventoryCell tmp;
 
-            for (int row = 0; row < cellsCount.x; row++)
-            for (int col = 0; col < cellsCount.y; col++)
+            for (int i = 0; i < cellsCount; i++)
             {
-                // TODO: hardcoded cell size (64, 64)
-                Vector3 pos = new Vector3(startingOffset.x + row * (cellSize.x + spacing.x), -(startingOffset.y + col * (cellSize.y + spacing.y)), 0);
-                cells[row, col] = Instantiate(emptyCell, pos, Quaternion.identity, parent);
-                // cells[row, col].transform.SetParent(transform, false);
-                cells[row, col].GetComponent<RectTransform>().anchoredPosition = pos;
+                tmp = Instantiate(emptyCell, _container);
+                tmp.Init(_draggingParent);
+                tmp.Render(emptyCell._item);
+                cells.Add(tmp);
             }
         }
 
         // TODO: append new items instead of overwriting from start
         private void UpdateInventoryItems(Core.Inventory.PlayerInventory inventory, List<Core.Inventory.Item> newItems)
         {
-            List<Core.Inventory.Item> items = inventory.GetItems();
-            int itemIndex = 0; // in inventory list
-            
-            for (int row = 0; row < cellsCount.x; row++)
-            for (int col = 0; col < cellsCount.y; col++)
+            // List<Core.Inventory.Item> items = inventory.GetItems();
+
+            // foreach (Transform child in _container)
+            //     Destroy(child.gameObject);
+
+            newItems.ForEach(item =>
             {
-                if (itemIndex == items.Count)
-                    return;
-
-                Core.Inventory.Item item = items[itemIndex];
-
-                // update inventory icon here
-                cells[row, col].GetComponent<UnityEngine.UI.RawImage>().texture = item.slotIcon;
-
-                itemIndex++;
-            }
+                var cell = Instantiate(emptyCell, _container);
+                cell.Init(_draggingParent);
+                cell.Render(item);
+            });
         }
     }
 }

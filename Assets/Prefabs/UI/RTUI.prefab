@@ -1430,6 +1430,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2735091040091520019, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3825487669863681955}
+    - target: {fileID: 2735091040091520019, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseInventory
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735091040091520019, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Core.RTUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4066067942955149032, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
+      propertyPath: _draggingParent
+      value: 
+      objectReference: {fileID: 7915445122051479475}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
 --- !u!1 &1559528493572132855 stripped
