@@ -10,7 +10,7 @@ namespace Core.RT
         {
             Debug.Log("Picked!");
             RTManager.GetPlayerInventory().AddItem(item);
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 }

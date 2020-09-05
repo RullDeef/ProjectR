@@ -6,22 +6,39 @@ namespace UI.Inventory
 {
     public class InventoryCell : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        public Core.Inventory.Item _item;
+        public Core.Inventory.PlayerItem _playerItem;
+        RawImage icon;
+        Text currentCountText = null; // Если итем не может быть застакан, это будет null
+        public RectTransform rectTransform;
 
         Transform _dragginParent;
         Transform _originalParent;
 
-        public void Init(Transform draggingParent)
+        public void Init(Core.Inventory.PlayerItem playerItem, Transform draggingParent)
         {
+            _playerItem = playerItem;
+
             _dragginParent = draggingParent;
             _originalParent = transform.parent;
+            icon = GetComponent<RawImage>();
+            rectTransform = GetComponent<RectTransform>();
+
+            if (playerItem.item.maxStacks != 1)
+                currentCountText = transform.GetChild(0).GetComponent<Text>();
         }
 
-        public void Render(Core.Inventory.Item item)
+        public void Render()
         {
-            _item = item;
-            name = item.name;
-            GetComponent<RawImage>().texture = item.slotIcon;
+            name = _playerItem.item.name;
+            icon.texture = _playerItem.item.slotIcon;
+
+            if (currentCountText != null)
+                currentCountText.text = _playerItem.count.ToString();
+        }
+
+        public void RenderText()
+        {
+            currentCountText.text = _playerItem.count.ToString();
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -47,8 +64,9 @@ namespace UI.Inventory
                     closestIndex = i;
                 }
             }
-            
+
             transform.SetSiblingIndex(closestIndex);
+            //Core.Inventory.PlayerInventory.SetIndex(_playerItem, closestIndex);
         }
     }
 }

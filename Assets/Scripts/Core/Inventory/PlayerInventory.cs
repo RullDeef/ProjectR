@@ -1,32 +1,47 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Core.Inventory
 {
     public class PlayerInventory : MonoBehaviour
     {
-        public delegate void OnItemsUpdate(PlayerInventory inventory, List<Item> newItems);
-        public OnItemsUpdate OnItemsUpdateCallback;
+        public delegate void OnItemsAdd(PlayerItem item);
+        public delegate void OnItemUpdate(PlayerItem item);
+        public OnItemsAdd OnItemsAddCallback;
+        public OnItemUpdate OnItemsUpdateCallback;
 
-        //Dictionary<int, Item> items; // индекс в инвентаре и сам итем
-        [SerializeField]
-        private List<Item> items;
+        List<PlayerItem> MainInventory;
+
+        private void Awake()
+        {
+            MainInventory = new List<PlayerItem>();
+        }
 
         public void AddItem(Item item)
         {
-            items.Add(item);
+            // найти, чтобы положить в стак, если предмет есть и его можно застакать
+            PlayerItem playerItem = MainInventory.Find(_ => _.item.id == item.id && _.count < item.maxStacks);
+            if (playerItem != null)
+            {
+                playerItem.count++;
 
-            List<Item> newItems = new List<Item>();
-            newItems.Add(item);
+                if (OnItemsUpdateCallback != null)
+                    OnItemsUpdateCallback(playerItem);
+            }
+            else
+            {
+                playerItem = new PlayerItem(item);
+                MainInventory.Add(playerItem);
 
-            if (OnItemsUpdateCallback != null)
-                OnItemsUpdateCallback(this, newItems);
+                if (OnItemsAddCallback != null)
+                    OnItemsAddCallback(playerItem);
+            }
         }
 
-        public List<Item> GetItems()
+        public List<PlayerItem> GetInventory()
         {
-            return items;
+            return MainInventory;
         }
     }
 }
