@@ -7,12 +7,14 @@ namespace UI.Inventory
     public class InventoryCell : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         public Core.Inventory.PlayerItem _playerItem;
-        RawImage icon;
+        public RawImage icon;
         Text currentCountText = null; // Если итем не может быть застакан, это будет null
         public RectTransform rectTransform;
 
         Transform _dragginParent;
         Transform _originalParent;
+
+        private InventoryCell clone;
 
         public void Init(Core.Inventory.PlayerItem playerItem, Transform draggingParent)
         {
@@ -41,9 +43,13 @@ namespace UI.Inventory
             currentCountText.text = _playerItem.count.ToString();
         }
 
+        private int lastSibIndex;
         public void OnBeginDrag(PointerEventData eventData)
         {
-            transform.SetParent(_dragginParent);
+            lastSibIndex = transform.GetSiblingIndex();
+            clone = Instantiate(this, _originalParent);
+            clone.transform.SetSiblingIndex(lastSibIndex);
+            transform.SetParent(_dragginParent);        
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -53,20 +59,29 @@ namespace UI.Inventory
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            int closestIndex = 0;
-            transform.SetParent(_originalParent);
+            Destroy(clone.gameObject);
 
-            for (int i = 0; i < _originalParent.childCount; i++)
+            if (RectTransformUtility.RectangleContainsScreenPoint(rectTransform, eventData.position))
             {
-                if (Vector2.Distance(transform.position, _originalParent.GetChild(i).position) <
-                    Vector2.Distance(transform.position, _originalParent.GetChild(closestIndex).position))
+                int closestIndex = 0;
+                for (int i = 0; i < _originalParent.childCount; i++)
                 {
-                    closestIndex = i;
+                    if (Vector2.Distance(transform.position, _originalParent.GetChild(i).position) <
+                        Vector2.Distance(transform.position, _originalParent.GetChild(closestIndex).position))
+                    {
+                        closestIndex = i;
+                    }
                 }
-            }
 
-            transform.SetSiblingIndex(closestIndex);
-            //Core.Inventory.PlayerInventory.SetIndex(_playerItem, closestIndex);
+                transform.SetParent(_originalParent);
+                if (lastSibIndex < closestIndex) closestIndex++;
+                transform.SetSiblingIndex(closestIndex);
+            }
+            if (RectTransformUtility.RectangleContainsScreenPoint(InventoryItemRenderer.instance.
+                DeleteItemButton.GetComponent<RectTransform>(), eventData.position))
+            {
+                Core.Inventory.PlayerInventory.instance.DeleteItem(_playerItem);
+            }
         }
     }
 }
