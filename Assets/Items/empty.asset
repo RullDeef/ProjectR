@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24e3023841823b0429411ff3370d664f, type: 3}
-  m_Name: Rock
+  m_Name: empty
   m_EditorClassIdentifier: 
-  id: 1
-  title: Rock
-  description: It is rock!
-  slotIcon: {fileID: 2800000, guid: 6bcebf567df106e428f9e21353cd8304, type: 3}
-  maxStacks: 2
+  id: 0
+  title: 
+  description: 
+  slotIcon: {fileID: 2800000, guid: e7013564797153c42b6719c83723b232, type: 3}
+  maxStacks: 1

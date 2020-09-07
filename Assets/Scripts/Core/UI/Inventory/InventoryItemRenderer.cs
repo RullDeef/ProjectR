@@ -1,59 +1,108 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 // TODO: refactor all namespaces. Separate UI from CORE
 namespace UI.Inventory
 {
-    public class InventoryItemRenderer : MonoBehaviour
+    public class InventoryItemRenderer : MonoBehaviour, IPointerDownHandler
     {
-        public Vector2Int cellsCount = new Vector2Int(8, 6);
-        public Vector2Int startingOffset = new Vector2Int(16, 16);
-        public Vector2Int spacing = new Vector2Int(8, 8);
+        public int cellsCount;
+        public GameObject emptySlot, target;
+        InventoryCell newCell;
+        private List<InventoryCell> cells;
+        public Transform _container, _draggingParent;
+        public Text descriptionText, capacityText;
+        public Button DeleteItemButton;
 
-        public GameObject emptyCell;
-
-        private GameObject[,] cells;
+        public static InventoryItemRenderer instance;
 
         private void Awake()
         {
+            instance = this;
+        }
+
+        private void Start() // подождать Awake у инвентаря плеера
+        {
             InitItemCells();
-            Core.RTManager.GetPlayerInventory().OnItemsUpdateCallback += UpdateInventoryItems;
+            Core.RTManager.GetPlayerInventory().OnItemsAddCallback += AddInventoryItem;
+            Core.RTManager.GetPlayerInventory().OnItemsUpdateCallback += UpdateInventoryItem;
+            Core.Inventory.PlayerInventory.OnItemDeleteCallback += DeleteInventoryItem;
+            gameObject.SetActive(false); // временный фикс
         }
 
         private void InitItemCells()
         {
-            cells = new GameObject[cellsCount.x, cellsCount.y];
+            cells = new List<InventoryCell>();
+            newCell = emptySlot.GetComponent<InventoryCell>();
+            InventoryCell tmp;
 
-            for (int row = 0; row < cellsCount.x; row++)
-            for (int col = 0; col < cellsCount.y; col++)
+            for (int i = 0; i < cellsCount; i++)
             {
-                // TODO: hardcoded cell size (64, 64)
-                Vector3 pos = new Vector3(startingOffset.x + row * (64 + spacing.x), -(startingOffset.y + col * (64 + spacing.y)), 0);
-                cells[row, col] = Instantiate(emptyCell, pos, Quaternion.identity, transform);
-                // cells[row, col].transform.SetParent(transform, false);
-                cells[row, col].GetComponent<RectTransform>().anchoredPosition = pos;
+                tmp = Instantiate(newCell, _container);
+                tmp.Init(newCell._playerItem, _draggingParent);
+                tmp.Render();
+                tmp.icon.raycastTarget = false;
+                cells.Add(tmp);
             }
+            UpdateCapacityText();
         }
 
         // TODO: append new items instead of overwriting from start
-        private void UpdateInventoryItems(Core.Inventory.PlayerInventory inventory, List<Core.Inventory.Item> newItems)
+        private void AddInventoryItem(Core.Inventory.PlayerItem newItem)
         {
-            List<Core.Inventory.Item> items = inventory.GetItems();
-            int itemIndex = 0; // in inventory list
-            
-            for (int row = 0; row < cellsCount.x; row++)
-            for (int col = 0; col < cellsCount.y; col++)
+            var cell = Instantiate(newCell, _container);
+            //inventory.SetIndex(newItem, cell.transform.GetSiblingIndex());
+            cell.Init(newItem, _draggingParent);
+            cell.Render();
+
+            cells.Add(cell);
+            UpdateCapacityText();
+        }
+
+        private void UpdateInventoryItem(Core.Inventory.PlayerItem playerItem)
+        {
+            var cell = cells.Find(inventoryCell => inventoryCell._playerItem.Equals(playerItem));
+            cell.RenderText();
+        }
+
+        private void DeleteInventoryItem(Core.Inventory.PlayerItem playerItem)
+        {
+            var cell = cells.Find(inventoryCell => inventoryCell._playerItem.Equals(playerItem));
+
+            SetVoidTarget();
+            Destroy(cell.gameObject);
+
+            cells.Remove(cell);
+            UpdateCapacityText();
+        }
+
+        void IPointerDownHandler.OnPointerDown(PointerEventData eventData) //клик на итем в инвентаре
+        {
+            var cell = cells.Find(cel => RectTransformUtility.RectangleContainsScreenPoint(cel.rectTransform, eventData.position));
+            if (cell != null)
             {
-                if (itemIndex == items.Count)
-                    return;
-
-                Core.Inventory.Item item = items[itemIndex];
-
-                // update inventory icon here
-                cells[row, col].GetComponent<UnityEngine.UI.RawImage>().texture = item.slotIcon;
-
-                itemIndex++;
+                descriptionText.text = cell._playerItem.ToString();
+                target.transform.position = cell.transform.position;
+                target.transform.SetParent(cell.transform);
             }
+            else
+            {
+                descriptionText.text = "";
+                SetVoidTarget();
+            }
+        }
+
+        private void SetVoidTarget()
+        {
+            target.transform.position = new Vector2(-50, -50);
+            target.transform.SetParent(_container.parent);
+        }
+
+        private void UpdateCapacityText()
+        {
+            capacityText.text = cells.Count + "/" + Core.Inventory.PlayerInventory.instance.maxItems;
         }
     }
 }

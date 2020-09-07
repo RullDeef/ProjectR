@@ -63,3 +63,4 @@ crashlytics-build.properties
 
 # Docs special folders
 Docs/latex
+.vscode/launch.json
