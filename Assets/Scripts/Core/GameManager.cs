@@ -37,19 +37,24 @@ namespace Core
 
         private void Update()
         {
-            // check for inventory key pressed
-            if (Input.GetKeyDown(KeyCode.Tab))
+            if (gamingState == GamingState.RealTime)
             {
-                if (gamingState == GamingState.RealTime)
+                // check for inventory key pressed
+                if (Input.GetKeyDown(KeyCode.Tab))
                 {
                     if (RTUI.IsInventoryOpen())
-                    {
                         CloseInventory();
-                    }
                     else
-                    {
                         OpenInventory();
-                    }
+                }
+
+                // check for craft key pressed
+                if (Input.GetKeyDown(KeyCode.I))
+                {
+                    if (RTUI.IsCraftOpen())
+                        CloseCraft();
+                    else
+                        OpenCraft();
                 }
             }
         }
@@ -75,7 +80,7 @@ namespace Core
                 instance.RTUI.ClosePauseMenu();
             else
                 instance.fightUI.ClosePauseMenu();
-            
+
             instance.isPaused = false;
         }
 
@@ -93,12 +98,25 @@ namespace Core
         {
             player.GetComponent<RT.Player.RTPlayerController>().DeactivateControlls();
             RTUI.OpenInventory();
+
         }
 
         public void CloseInventory()
         {
             RTUI.CloseInventory();
             player.GetComponent<RT.Player.RTPlayerController>().ActivateControlls();
+        }
+
+        public void OpenCraft()
+        {
+            //player.GetComponent<RT.Player.RTPlayerController>().DeactivateControlls();
+            RTUI.OpenCraft();
+        }
+
+        public void CloseCraft()
+        {
+            RTUI.CloseCraft();
+            //player.GetComponent<RT.Player.RTPlayerController>().ActivateControlls();
         }
     }
 }

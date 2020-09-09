@@ -29,8 +29,7 @@ namespace Core.Inventory
             if (playerItem != null)
             {
                 playerItem.count++;
-                if (OnItemsUpdateCallback != null)
-                    OnItemsUpdateCallback(playerItem);
+                UpdateItem(playerItem);
             }
             else
             {
@@ -45,17 +44,52 @@ namespace Core.Inventory
             return true;
         }
 
+        private void UpdateItem(PlayerItem playerItem)
+        {
+            if (OnItemsUpdateCallback != null)
+                OnItemsUpdateCallback(playerItem);
+        }
+
         public void DeleteItem(PlayerItem playerItem)
         {
-            PlayerItem itemToDelete = MainInventory.Find(item => item.Equals(playerItem));
-            MainInventory.Remove(itemToDelete);
+            MainInventory.Remove(playerItem);
             if (OnItemDeleteCallback != null)
-                OnItemDeleteCallback(itemToDelete);
+                OnItemDeleteCallback(playerItem);
+        }
+
+        private void DeleteItems(List<PlayerItem> itemsToDelete)
+        {
+            PlayerItem tmp;
+            foreach (PlayerItem itemToDelete in itemsToDelete)
+            {
+                tmp = MainInventory.Find(myItem => myItem.item.id == itemToDelete.item.id && myItem.count >= itemToDelete.count);
+                tmp.count -= itemToDelete.count;
+                if (tmp.count == 0)
+                {
+                    DeleteItem(tmp);
+                }
+                else
+                {
+                    UpdateItem(tmp);
+                }
+            }
         }
 
         public List<PlayerItem> GetInventory()
         {
             return MainInventory;
-        }       
+        }
+
+        public void Craft(List<PlayerItem> ingredients, Item result)
+        {
+            PlayerItem findIngredient;
+            foreach (PlayerItem ingredient in ingredients)
+            {
+                findIngredient = MainInventory.Find(myItem => myItem.item.id == ingredient.item.id && myItem.count >= ingredient.count);
+                if (findIngredient == null) return;
+            }
+            DeleteItems(ingredients);
+            AddItem(result);
+        }
     }
 }

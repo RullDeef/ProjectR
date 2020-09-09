@@ -7,11 +7,8 @@ using UnityEngine.UI;
     Show - показать messageBox
     
     Определить onYes - действие на левую кнопку (Yes), так же дописать в конце
-        messageBox.Exit(); для закрытия messageBox
+        messageBox.Close(); для закрытия messageBox
     onNo - по умолчанию закрывает messageBox
-
-    Предпологается размещение этого объекта на сцене единожды и в месте где нужен messageBox,
-    перетащить скрипт messageBox в свой скрипт
 
 **/
 public class MessageBox : MonoBehaviour
@@ -31,7 +28,7 @@ public class MessageBox : MonoBehaviour
 
         onNo = () =>
         {
-            Exit();
+            Close();
         };
     }
 
@@ -52,7 +49,7 @@ public class MessageBox : MonoBehaviour
             onNo();
     }
 
-    public void Exit()
+    public void Close()
     {
         gameObject.SetActive(false);
     }

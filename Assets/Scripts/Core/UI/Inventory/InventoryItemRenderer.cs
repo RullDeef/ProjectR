@@ -39,12 +39,12 @@ namespace UI.Inventory
                 Core.Inventory.PlayerInventory.instance.DeleteItem(currentCell._playerItem);
                 imageInventory.color = new Color(255, 255, 255, 100);
                 deleteItemButtonPressed = false;
-                messageBoxOnDeleteItem.Exit();
+                messageBoxOnDeleteItem.Close();
             };
             messageBoxOnDeleteItem.onNo = () =>
             {
                 currentCell.ReturnOnLastPlace();
-                messageBoxOnDeleteItem.Exit();
+                messageBoxOnDeleteItem.Close();
             };
 
             gameObject.SetActive(false); // временный фикс
