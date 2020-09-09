@@ -2470,18 +2470,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4421093585454191303, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4421093585454191303, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4421093585454191303, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4466412435505401602, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -2597,18 +2585,6 @@ PrefabInstance:
     - target: {fileID: 7915445122051479479, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
       propertyPath: m_Name
       value: RTUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763546028385694435, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763546028385694435, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8763546028385694435, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}
-      propertyPath: m_Color.b
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82f64150bbb3758459874b9136ed1d85, type: 3}

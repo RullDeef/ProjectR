@@ -7,7 +7,7 @@ using UnityEngine.UI;
     Show - показать messageBox
     
     Определить onYes - действие на левую кнопку (Yes), так же дописать в конце
-        messageBox.gameObject.SetActive(false); для закрытия messageBox
+        messageBox.Exit(); для закрытия messageBox
     onNo - по умолчанию закрывает messageBox
 
     Предпологается размещение этого объекта на сцене единожды и в месте где нужен messageBox,
