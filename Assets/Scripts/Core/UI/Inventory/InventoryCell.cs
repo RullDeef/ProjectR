@@ -7,14 +7,14 @@ namespace UI.Inventory
     public class InventoryCell : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         public Core.Inventory.PlayerItem _playerItem;
-        public RawImage icon;
-        Text currentCountText = null; // Если итем не может быть застакан, это будет null
+        public  RawImage icon;
         public RectTransform rectTransform;
 
-        Transform _dragginParent;
-        Transform _originalParent;
-
+        private Text currentCountText = null; // Если итем не может быть застакан, это будет null
+        private Transform _dragginParent;
+        private Transform _originalParent;
         private InventoryCell clone;
+        public int lastSibIndex;
 
         public void Init(Core.Inventory.PlayerItem playerItem, Transform draggingParent)
         {
@@ -42,14 +42,13 @@ namespace UI.Inventory
         {
             currentCountText.text = _playerItem.count.ToString();
         }
-
-        private int lastSibIndex;
+        
         public void OnBeginDrag(PointerEventData eventData)
         {
             lastSibIndex = transform.GetSiblingIndex();
             clone = Instantiate(this, _originalParent);
             clone.transform.SetSiblingIndex(lastSibIndex);
-            transform.SetParent(_dragginParent);        
+            transform.SetParent(_dragginParent);
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -61,7 +60,8 @@ namespace UI.Inventory
         {
             Destroy(clone.gameObject);
 
-            if (RectTransformUtility.RectangleContainsScreenPoint(rectTransform, eventData.position))
+            // если итем после переноса остался в поле инвентаря, то его надо поставить в ближайшую клетку
+            if (RectTransformUtility.RectangleContainsScreenPoint(InventoryItemRenderer.instance.viewPort, eventData.position))
             {
                 int closestIndex = 0;
                 for (int i = 0; i < _originalParent.childCount; i++)
@@ -77,11 +77,20 @@ namespace UI.Inventory
                 if (lastSibIndex < closestIndex) closestIndex++;
                 transform.SetSiblingIndex(closestIndex);
             }
+
+            // если итем переместили на кнопку удалить
             if (RectTransformUtility.RectangleContainsScreenPoint(InventoryItemRenderer.instance.
                 DeleteItemButton.GetComponent<RectTransform>(), eventData.position))
             {
-                Core.Inventory.PlayerInventory.instance.DeleteItem(_playerItem);
+                InventoryItemRenderer.instance.messageBoxOnDeleteItem.Show();
             }
+        }
+
+        // Вернуть итем на прежнее место
+        public void ReturnOnLastPlace()
+        {
+            transform.SetParent(_originalParent);
+            transform.SetSiblingIndex(lastSibIndex);
         }
     }
 }

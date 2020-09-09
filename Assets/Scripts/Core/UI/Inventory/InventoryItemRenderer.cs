@@ -11,10 +11,13 @@ namespace UI.Inventory
         public int cellsCount;
         public GameObject emptySlot, target;
         InventoryCell newCell;
+        public static InventoryCell currentCell;
         private List<InventoryCell> cells;
-        public Transform _container, _draggingParent;
+        public RectTransform _container, _draggingParent, viewPort;
         public Text descriptionText, capacityText;
         public Button DeleteItemButton;
+        public Image imageInventory;
+        public MessageBox messageBoxOnDeleteItem;
 
         public static InventoryItemRenderer instance;
 
@@ -29,6 +32,21 @@ namespace UI.Inventory
             Core.RTManager.GetPlayerInventory().OnItemsAddCallback += AddInventoryItem;
             Core.RTManager.GetPlayerInventory().OnItemsUpdateCallback += UpdateInventoryItem;
             Core.Inventory.PlayerInventory.OnItemDeleteCallback += DeleteInventoryItem;
+
+            messageBoxOnDeleteItem.Init("Delete this item?", "Yes", "No!");
+            messageBoxOnDeleteItem.onYes = () =>
+            {
+                Core.Inventory.PlayerInventory.instance.DeleteItem(currentCell._playerItem);
+                imageInventory.color = new Color(255, 255, 255, 100);
+                deleteItemButtonPressed = false;
+                messageBoxOnDeleteItem.Exit();
+            };
+            messageBoxOnDeleteItem.onNo = () =>
+            {
+                currentCell.ReturnOnLastPlace();
+                messageBoxOnDeleteItem.Exit();
+            };
+
             gameObject.SetActive(false); // временный фикс
         }
 
@@ -43,7 +61,7 @@ namespace UI.Inventory
                 tmp = Instantiate(newCell, _container);
                 tmp.Init(newCell._playerItem, _draggingParent);
                 tmp.Render();
-                tmp.icon.raycastTarget = false;
+                tmp.icon.raycastTarget = false; // если ячейка пустая
                 cells.Add(tmp);
             }
             UpdateCapacityText();
@@ -52,40 +70,43 @@ namespace UI.Inventory
         // TODO: append new items instead of overwriting from start
         private void AddInventoryItem(Core.Inventory.PlayerItem newItem)
         {
-            var cell = Instantiate(newCell, _container);
-            //inventory.SetIndex(newItem, cell.transform.GetSiblingIndex());
-            cell.Init(newItem, _draggingParent);
-            cell.Render();
+            currentCell = Instantiate(newCell, _container);
+            //inventory.SetIndex(newItem, currentCell.transform.GetSiblingIndex());
+            currentCell.Init(newItem, _draggingParent);
+            currentCell.Render();
 
-            cells.Add(cell);
+            cells.Add(currentCell);
             UpdateCapacityText();
         }
 
         private void UpdateInventoryItem(Core.Inventory.PlayerItem playerItem)
         {
-            var cell = cells.Find(inventoryCell => inventoryCell._playerItem.Equals(playerItem));
-            cell.RenderText();
+            currentCell = cells.Find(inventoryCell => inventoryCell._playerItem.Equals(playerItem));
+            currentCell.RenderText();
         }
 
         private void DeleteInventoryItem(Core.Inventory.PlayerItem playerItem)
         {
-            var cell = cells.Find(inventoryCell => inventoryCell._playerItem.Equals(playerItem));
+            currentCell = cells.Find(inventoryCell => inventoryCell._playerItem.Equals(playerItem));
 
             SetVoidTarget();
-            Destroy(cell.gameObject);
+            Destroy(currentCell.gameObject);
 
-            cells.Remove(cell);
+            cells.Remove(currentCell);
             UpdateCapacityText();
         }
 
         void IPointerDownHandler.OnPointerDown(PointerEventData eventData) //клик на итем в инвентаре
         {
-            var cell = cells.Find(cel => RectTransformUtility.RectangleContainsScreenPoint(cel.rectTransform, eventData.position));
-            if (cell != null)
+            currentCell = cells.Find(cel => RectTransformUtility.RectangleContainsScreenPoint(cel.rectTransform, eventData.position));
+            if (currentCell != null)
             {
-                descriptionText.text = cell._playerItem.ToString();
-                target.transform.position = cell.transform.position;
-                target.transform.SetParent(cell.transform);
+                descriptionText.text = currentCell._playerItem.ToString();
+                target.transform.position = currentCell.transform.position;
+                target.transform.SetParent(currentCell.transform);
+
+                if (deleteItemButtonPressed)
+                    messageBoxOnDeleteItem.Show();
             }
             else
             {
@@ -103,6 +124,30 @@ namespace UI.Inventory
         private void UpdateCapacityText()
         {
             capacityText.text = cells.Count + "/" + Core.Inventory.PlayerInventory.instance.maxItems;
+        }
+
+        public static bool deleteItemButtonPressed;
+        public void OnClickDeleteItemButton()
+        {
+            // если уже выбран предмет, то спрашиваем можно ли удалить
+            if (!target.transform.parent.Equals(_container.parent) && !deleteItemButtonPressed)
+            {
+                currentCell.lastSibIndex = currentCell.transform.GetSiblingIndex();
+                messageBoxOnDeleteItem.Show();
+                return;
+            }
+
+            // предмет не выбран, следующий клик по итему и будет предложено удаление
+            if (deleteItemButtonPressed)
+            {
+                imageInventory.color = new Color(255, 255, 255, 100);
+                deleteItemButtonPressed = false;
+            }
+            else
+            {
+                imageInventory.color = new Color(255, 0, 0, 100);
+                deleteItemButtonPressed = true;
+            }
         }
     }
 }

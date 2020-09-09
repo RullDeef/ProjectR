@@ -56,6 +56,6 @@ namespace Core.Inventory
         public List<PlayerItem> GetInventory()
         {
             return MainInventory;
-        }
+        }       
     }
 }
