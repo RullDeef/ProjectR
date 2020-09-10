@@ -7,10 +7,11 @@ namespace Core.Inventory
         public Item item;
         public int count;
 
-        public PlayerItem(Item item)
+        public PlayerItem(Item item, int count = 1)
         {
             this.item = item;
-            count = 1;
+            if (count > item.maxStacks) throw new System.Exception();
+            this.count = count;
         }
 
         public override string ToString()

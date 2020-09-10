@@ -4,10 +4,17 @@ using Core.Inventory;
 
 namespace Core.Craft
 {
-    public class Recipe : MonoBehaviour
+    [CreateAssetMenu(fileName = "Recipe", menuName = "ProjectR/Recipe", order = 0)]
+    public class Recipe : ScriptableObject
     {
-        List<PlayerItem> ingredients; // необходимые ингредиенты для крафта
-        Item result; // результат крафта
+        public List<PlayerItem> ingredients; // необходимые ингредиенты для крафта
+        public PlayerItem result; // результат крафта
+
+        public Recipe(List<PlayerItem> ingredients, PlayerItem result)
+        {
+            this.ingredients = ingredients;
+            this.result = result;
+        }
 
         public void Craft()
         {

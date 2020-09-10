@@ -129,7 +129,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 297.99902, y: 0}
+  m_AnchoredPosition: {x: 0.000030517578, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &3001329609132405484
@@ -607,7 +607,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 7438373379730833849}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.826087
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2304,7 +2304,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: -0.14239405}
+  m_AnchoredPosition: {x: -0.000061035156, y: -0.000016635284}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &7008015034591158152
@@ -2462,8 +2462,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5706560502698237917}
   m_HandleRect: {fileID: 3505320527604586529}
   m_Direction: 0
-  m_Value: 1.0000002
-  m_Size: 0
+  m_Value: 0.0000067816263
+  m_Size: 0.9430375
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2526,7 +2526,7 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -3681,19 +3681,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 920252857477529869, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -359.99994
+      value: -0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 985041865396616422, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
       propertyPath: m_Name
       value: InventoryPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 2862187504707015964, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
+      propertyPath: m_FontData.m_BestFit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2862187504707015964, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 22
+      objectReference: {fileID: 0}
     - target: {fileID: 3088860456715657250, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3088860456715657250, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
       propertyPath: m_Size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4066067942955149032, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
       propertyPath: _draggingParent
@@ -3703,6 +3711,10 @@ PrefabInstance:
       propertyPath: messageBoxOnDeleteItem
       value: 
       objectReference: {fileID: 1434752445696918993}
+    - target: {fileID: 5414642380028789702, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 136
+      objectReference: {fileID: 0}
     - target: {fileID: 6260166675344358636, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -3721,6 +3733,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8254785085614848276, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254785085614848276, guid: 4acd9b3dbe8dbad44b35d9936077b81d, type: 3}
+      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

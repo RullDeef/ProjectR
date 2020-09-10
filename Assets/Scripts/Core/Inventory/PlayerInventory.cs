@@ -44,6 +44,26 @@ namespace Core.Inventory
             return true;
         }
 
+        public bool AddItem(PlayerItem playerItem)
+        {
+            PlayerItem existingPlayerItem = MainInventory.Find(_ => _.item.id == playerItem.item.id && _.count < playerItem.item.maxStacks);
+
+            int availableSpace = playerItem.item.maxStacks - existingPlayerItem.count;
+            if (availableSpace > playerItem.count)
+            {
+                existingPlayerItem.count += playerItem.count;
+            }
+            else
+            {
+                if (MainInventory.Count >= maxItems) return false;
+
+                existingPlayerItem.count += availableSpace;
+                PlayerItem newItem = new PlayerItem(playerItem.item, playerItem.count - availableSpace); ;
+            }
+
+            return true;
+        }
+
         private void UpdateItem(PlayerItem playerItem)
         {
             if (OnItemsUpdateCallback != null)
@@ -80,7 +100,8 @@ namespace Core.Inventory
             return MainInventory;
         }
 
-        public void Craft(List<PlayerItem> ingredients, Item result)
+        // test
+        public void Craft(List<PlayerItem> ingredients, PlayerItem result)
         {
             PlayerItem findIngredient;
             foreach (PlayerItem ingredient in ingredients)
@@ -89,7 +110,7 @@ namespace Core.Inventory
                 if (findIngredient == null) return;
             }
             DeleteItems(ingredients);
-            AddItem(result);
+            AddItem(result); //test!
         }
     }
 }
