@@ -7,6 +7,7 @@ namespace Core.Fight
      */
     public class FightUnitMotor : MonoBehaviour
     {
+        public FightUnitController controller;
         public HexPath activePath;
 
         public float movingSpeed = 1.0f; // cells/sec.
@@ -16,6 +17,11 @@ namespace Core.Fight
         private Vector3 nextPosition;
         private float time; // [0, 1] for smooth moving between neighbor cells
 
+        private void Awake()
+        {
+            controller = GetComponent<FightUnitController>();
+        }
+
         public void MoveWithPath(HexPath path)
         {
             if (!isMoving)
@@ -23,16 +29,25 @@ namespace Core.Fight
                 isMoving = true;
                 activePath = path;
                 time = 0.0f;
-                previousPosition = transform.position;
+                previousPosition = activePath.GetCurrentCell().transform.position;
+                activePath.GoToNextCell();
                 nextPosition = activePath.GetCurrentCell().transform.position;
             }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            // render path
+            if (activePath != null)
+                foreach (HexCell cell in activePath.cells)
+                    Gizmos.DrawWireSphere(cell.transform.position, 1);
         }
 
         private void FixedUpdate()
         {
             if (GameManager.IsPaused())
                 return;
-            
+
             if (activePath != null && activePath.IsNotCompleted())
             {
                 if (time >= 1.0f)
@@ -44,6 +59,7 @@ namespace Core.Fight
                     {
                         transform.position = previousPosition;
                         isMoving = false;
+                        controller.cell = activePath.GetDestinationCell();
                     }
                     else
                     {

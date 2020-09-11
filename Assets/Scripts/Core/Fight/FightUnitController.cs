@@ -21,14 +21,15 @@ namespace Core.Fight
 
         private StateMachine fsm;
 
-        private FightUnitMotor motor;
+        protected FightUnitMotor motor;
 
         void Awake()
         {
-            fsm.AddState("wait", () => {});
-            fsm.AddState("going", () => {
-                /// ?
-            });
+            fsm = new StateMachine();
+            motor = GetComponent<FightUnitMotor>();
+
+            fsm.AddState("wait", () => { });
+            fsm.AddState("going", () => { });
 
             fsm.AddTransition("going", "wait", () => !motor.isMoving);
 
@@ -37,7 +38,7 @@ namespace Core.Fight
 
         public void GoToCell(HexCell targetCell)
         {
-            HexPath path = targetCell.hexMap.ConstructPath(cell, targetCell);
+            HexPath path = cell.hexMap.ConstructPath(cell, targetCell);
             motor.MoveWithPath(path);
         }
 

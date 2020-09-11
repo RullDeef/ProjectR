@@ -12,10 +12,14 @@ namespace Core
 
         [SerializeField]
         public MapGenerationParams mapGenerationParams;
+        public HexMap currentMap;
 
         private void Awake()
         {
             instance = this;
+
+            // for debugging
+            InitFight(new List<UnitStats>());
         }
 
         public static void InitFight(List<UnitStats> units)
@@ -24,14 +28,25 @@ namespace Core
 
             foreach (UnitStats unit in units)
                 instance.PlaceEnemyUnitInRandomPlace(unit);
+
+            // for debugging 2 hardcoded units - player and enemy box
+            // ...
             
             instance.InitFightQueue();
+        }
+
+        public static HexMap GetMap()
+        {
+            return instance.currentMap;
         }
 
         private void GenerateMap()
         {
             HexMapGenerator generator = GetComponent<HexMapGenerator>();
-            generator.Generate(mapGenerationParams);
+            // generator.Generate(mapGenerationParams);
+
+            // for debugging now
+            currentMap = generator.LoadFromScene();
         }
 
         private void PlaceEnemyUnitInRandomPlace(UnitStats unitStats)

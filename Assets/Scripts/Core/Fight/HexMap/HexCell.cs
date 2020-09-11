@@ -12,11 +12,17 @@ namespace Core.Fight
 
     public class HexCell : MonoBehaviour
     {
+        [SerializeField]
         public HexMap hexMap;
         public bool walkable = true; // true if any unit can be placed inside this cell
 
 
         private List<HexCell> neighbors;
+
+        public List<HexCell> GetNeighbors()
+        {
+            return neighbors;
+        }
 
         private void Awake()
         {
@@ -39,6 +45,11 @@ namespace Core.Fight
                     neighbors.Add(cell);
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            return transform.position.ToString();
         }
     }
 }

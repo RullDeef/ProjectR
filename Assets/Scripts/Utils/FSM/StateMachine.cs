@@ -59,6 +59,7 @@ namespace Utils.FSM
             state.actionEnter = actionEnter;
             state.actionStay = actionStay;
             state.actionExit = actionExit;
+            state.transitions = new List<Transition>();
             states.Add(state);
         }
 
