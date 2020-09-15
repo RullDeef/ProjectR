@@ -49,8 +49,7 @@ namespace UI.Craft
             currentCell = cells.Find(cel => RectTransformUtility.RectangleContainsScreenPoint(cel.rectTransform, eventData.position));
             if (currentCell != null)
             {
-                // баг только после того как скрафтишь по 1, 2, 1! рецпету, на последнем баг
-                if (currentCell._recipe.Craft()) // БАГ здесь, в _recipe неверный result, но верные ингредиенты
+                if (currentCell._recipe.Craft())
                 {
                     Debug.Log(currentCell.transform.GetSiblingIndex() + " " +
                         currentCell._recipe.result.item.title + " is craft! " + currentCell._recipe.result.count);

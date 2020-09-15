@@ -122,7 +122,7 @@ namespace Core.Inventory
         public bool Craft(List<PlayerItem> ingredients, PlayerItem result)
         {
             // Ищем ингредиенты, если нету хотя бы одного, то не крафтим
-            List<PlayerItem> find = MainInventory.Where(myItem => ingredients.All(ingredient => myItem.item.id == ingredient.item.id && myItem.count >= ingredient.count)).ToList();
+            List<PlayerItem> find = MainInventory.Where(myItem => ingredients.Any(ingredient => myItem.item.id == ingredient.item.id && myItem.count >= ingredient.count)).ToList();
             if (find.Count >= ingredients.Count) // пока так, если нашлись все предметы
             {
                 DeleteItems(ingredients);

@@ -11,7 +11,7 @@ namespace Core.Inventory
         {
             this.item = item;
             if (count > item.maxStacks)
-                throw new System.Exception("count > item.maxStacks");
+                throw new System.ArgumentOutOfRangeException("count > item.maxStacks");
             this.count = count;
         }
 
