@@ -16,4 +16,4 @@ MonoBehaviour:
   title: Red Rock
   description: It is red rock!
   slotIcon: {fileID: 2800000, guid: 3d6064e2e1cd7214e9f67f3a68f494fb, type: 3}
-  maxStacks: 2
+  maxStacks: 3

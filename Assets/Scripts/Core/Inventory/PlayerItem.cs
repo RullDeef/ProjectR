@@ -10,7 +10,8 @@ namespace Core.Inventory
         public PlayerItem(Item item, int count = 1)
         {
             this.item = item;
-            if (count > item.maxStacks) throw new System.Exception();
+            if (count > item.maxStacks)
+                throw new System.Exception("count > item.maxStacks");
             this.count = count;
         }
 

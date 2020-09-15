@@ -1,1 +1,2 @@
 Rock|2=Red Rock|1
+Rock|1,Rock|1,Rock|1,Rock|1,Rock|1,Rock|1=Red Rock|3

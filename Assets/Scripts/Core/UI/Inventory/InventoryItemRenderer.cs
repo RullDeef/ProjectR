@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Core.Inventory;
 
 // TODO: refactor all namespaces. Separate UI from CORE
 namespace UI.Inventory
@@ -26,7 +27,7 @@ namespace UI.Inventory
             instance = this;
         }
 
-        private void Start() // подождать Awake у инвентаря плеера
+        private void Start() // ожидание Awake у инвентаря плеера
         {
             InitItemCells();
             Core.RTManager.GetPlayerInventory().OnItemsAddCallback += AddInventoryItem;
@@ -54,26 +55,23 @@ namespace UI.Inventory
         {
             cells = new List<InventoryCell>();
             newCell = emptySlot.GetComponent<InventoryCell>();
-            InventoryCell tmp;
+            newCell._playerItem = new PlayerItem(Core.Craft.PlayerCraft.items["empty"]);
 
+            //cellsCount = Core.RTManager.GetPlayerInventory().maxItems;
             for (int i = 0; i < cellsCount; i++)
             {
-                tmp = Instantiate(newCell, _container);
-                tmp.Init(newCell._playerItem, _draggingParent);
-                tmp.Render();
-                tmp.icon.raycastTarget = false; // если ячейка пустая
-                cells.Add(tmp);
+                AddInventoryItem(newCell._playerItem);
             }
-            UpdateCapacityText();
         }
 
-        // TODO: append new items instead of overwriting from start
         private void AddInventoryItem(Core.Inventory.PlayerItem newItem)
         {
             currentCell = Instantiate(newCell, _container);
-            //inventory.SetIndex(newItem, currentCell.transform.GetSiblingIndex());
             currentCell.Init(newItem, _draggingParent);
             currentCell.Render();
+
+            if (newItem.item.id == 0)
+                currentCell.icon.raycastTarget = false; // если ячейка пустая
 
             cells.Add(currentCell);
             UpdateCapacityText();
@@ -110,13 +108,13 @@ namespace UI.Inventory
             }
             else
             {
-                descriptionText.text = "";
                 SetVoidTarget();
             }
         }
 
         private void SetVoidTarget()
         {
+            descriptionText.text = "";
             target.transform.position = new Vector2(-50, -50);
             target.transform.SetParent(_container.parent);
         }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Core.Inventory
@@ -44,21 +45,37 @@ namespace Core.Inventory
             return true;
         }
 
-        public bool AddItem(PlayerItem playerItem)
+        public bool AddItem(PlayerItem itemToAdd)
         {
-            PlayerItem existingPlayerItem = MainInventory.Find(_ => _.item.id == playerItem.item.id && _.count < playerItem.item.maxStacks);
+            PlayerItem existingPlayerItem = MainInventory.Find(_ => _.item.id == itemToAdd.item.id && _.count < _.item.maxStacks);
 
-            int availableSpace = playerItem.item.maxStacks - existingPlayerItem.count;
-            if (availableSpace > playerItem.count)
+            if (existingPlayerItem != null)
             {
-                existingPlayerItem.count += playerItem.count;
+                int availableSpace = itemToAdd.item.maxStacks - existingPlayerItem.count;
+                if (availableSpace >= itemToAdd.count)
+                {
+                    existingPlayerItem.count += itemToAdd.count;
+                }
+                else // Если места в существующем итеме не хватит
+                {
+                    if (MainInventory.Count >= maxItems) return false;
+
+                    existingPlayerItem.count += availableSpace;
+                    PlayerItem newItem = new PlayerItem(itemToAdd.item, itemToAdd.count - availableSpace);
+                    MainInventory.Add(newItem);
+
+                    if (OnItemsAddCallback != null)
+                        OnItemsAddCallback(newItem);
+                }
+                UpdateItem(existingPlayerItem);
             }
             else
             {
                 if (MainInventory.Count >= maxItems) return false;
+                MainInventory.Add(itemToAdd);
 
-                existingPlayerItem.count += availableSpace;
-                PlayerItem newItem = new PlayerItem(playerItem.item, playerItem.count - availableSpace); ;
+                if (OnItemsAddCallback != null)
+                    OnItemsAddCallback(itemToAdd);
             }
 
             return true;
@@ -79,18 +96,18 @@ namespace Core.Inventory
 
         private void DeleteItems(List<PlayerItem> itemsToDelete)
         {
-            PlayerItem tmp;
+            PlayerItem findItem;
             foreach (PlayerItem itemToDelete in itemsToDelete)
             {
-                tmp = MainInventory.Find(myItem => myItem.item.id == itemToDelete.item.id && myItem.count >= itemToDelete.count);
-                tmp.count -= itemToDelete.count;
-                if (tmp.count == 0)
+                findItem = MainInventory.Find(myItem => myItem.item.id == itemToDelete.item.id && myItem.count >= itemToDelete.count);
+                findItem.count -= itemToDelete.count;
+                if (findItem.count == 0)
                 {
-                    DeleteItem(tmp);
+                    DeleteItem(findItem);
                 }
                 else
                 {
-                    UpdateItem(tmp);
+                    UpdateItem(findItem);
                 }
             }
         }
@@ -100,17 +117,18 @@ namespace Core.Inventory
             return MainInventory;
         }
 
-        // test
-        public void Craft(List<PlayerItem> ingredients, PlayerItem result)
+        public bool Craft(List<PlayerItem> ingredients, PlayerItem result)
         {
-            PlayerItem findIngredient;
-            foreach (PlayerItem ingredient in ingredients)
+            // Ищем ингредиенты, если нету хотя бы одного, то не крафтим
+            List<PlayerItem> find = MainInventory.Where(myItem => ingredients.All(ingredient => myItem.item.id == ingredient.item.id && myItem.count >= ingredient.count)).ToList();
+            if (find.Count >= ingredients.Count) // пока так, если нашлись все предметы
             {
-                findIngredient = MainInventory.Find(myItem => myItem.item.id == ingredient.item.id && myItem.count >= ingredient.count);
-                if (findIngredient == null) return;
+                DeleteItems(ingredients);
+                AddItem(result);
+                return true;
             }
-            DeleteItems(ingredients);
-            AddItem(result); //test!
+
+            return false;
         }
     }
 }
