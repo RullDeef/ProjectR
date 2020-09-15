@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,40 +34,46 @@ namespace Core.Craft
             string strResult, strItem;
             int count;
 
-            // Из каждой строки в файле получить рецепт
-            foreach (string str in sRecipes)
-            {
-                tmp = str.Split('='); // делим строку на строку ингредиентов и строку результата
-
-                strIngredients = tmp[0].Split(','); // строка ингредиентов
-                strResult = tmp[1]; // строка результата
-
-                // Получение результата
-                tmp = strResult.Split('|');
-                strItem = tmp[0];
-                count = int.Parse(tmp[1]);
-                PlayerItem result = new PlayerItem(items[strItem], count);
-
-                // Получение ингредиентов
-                ingredients = new List<PlayerItem>();
-                foreach (var sItem in strIngredients)
+            // try
+            // {
+                // Из каждой строки в файле получить рецепт
+                foreach (string str in sRecipes)
                 {
-                    tmp = sItem.Split('|');
+                    tmp = str.Split('='); // делим строку на строку ингредиентов и строку результата
+
+                    strIngredients = tmp[0].Split(','); // строка ингредиентов
+                    strResult = tmp[1]; // строка результата
+
+                    // Получение результата
+                    tmp = strResult.Split('|');
                     strItem = tmp[0];
                     count = int.Parse(tmp[1]);
-                    AddItem(new PlayerItem(items[strItem], count));
+                    PlayerItem result = new PlayerItem(items[strItem], count);
+
+                    // Получение ингредиентов
+                    ingredients = new List<PlayerItem>();
+                    foreach (var sItem in strIngredients)
+                    {
+                        tmp = sItem.Split('|');
+                        strItem = tmp[0];
+                        count = int.Parse(tmp[1]);
+                        AddItem(new PlayerItem(items[strItem], count));
+                    }
+
+                    // Добавление рецепта в список рецептов
+                    Recipe recipe = ScriptableObject.CreateInstance<Recipe>();
+                    recipe.ingredients = ingredients;
+                    recipe.result = result;
+
+                    recipes.Add(recipe);
                 }
-
-                // Добавление рецепта в список рецептов
-                Recipe recipe = ScriptableObject.CreateInstance<Recipe>();
-                recipe.ingredients = ingredients;
-                recipe.result = result;
-
-                recipes.Add(recipe);
-                //recipes.Add(new Recipe(ingredients, result));
-            }
-            recipes.ToString();
+            // }
+            // catch (FormatException)
+            // {
+            //     Debug.LogError("Repieces.txt имеет неправильный формат!");
+            // }
         }
+
 
         public void AddItem(PlayerItem itemToAdd)
         {

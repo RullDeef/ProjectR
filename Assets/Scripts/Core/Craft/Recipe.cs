@@ -10,12 +10,6 @@ namespace Core.Craft
         public List<PlayerItem> ingredients; // необходимые ингредиенты для крафта
         public PlayerItem result; // результат крафта
 
-        // public Recipe(List<PlayerItem> ingredients, PlayerItem result)
-        // {
-        //     this.ingredients = ingredients;
-        //     this.result = result;
-        // }
-
         public bool Craft()
         {
             return PlayerInventory.instance.Craft(ingredients, result);
