@@ -72,10 +72,12 @@ namespace Core.Inventory
             else
             {
                 if (MainInventory.Count >= maxItems) return false;
-                MainInventory.Add(itemToAdd);
+
+                PlayerItem newItem = new PlayerItem(itemToAdd.item, itemToAdd.count);
+                MainInventory.Add(newItem);
 
                 if (OnItemsAddCallback != null)
-                    OnItemsAddCallback(itemToAdd);
+                    OnItemsAddCallback(newItem);
             }
 
             return true;
