@@ -14,6 +14,9 @@ namespace Core
         public MapGenerationParams mapGenerationParams;
         public HexMap currentMap;
 
+        public List<UnitStats> units;
+        public ATBScale atbScale;
+
         private void Awake()
         {
             instance = this;
@@ -22,17 +25,20 @@ namespace Core
             InitFight(new List<UnitStats>());
         }
 
-        public static void InitFight(List<UnitStats> units)
+        public static void InitFight(List<UnitStats> fightingUnits)
         {
+            instance.units = fightingUnits;
+
             instance.GenerateMap();
 
-            foreach (UnitStats unit in units)
+            foreach (UnitStats unit in fightingUnits)
                 instance.PlaceEnemyUnitInRandomPlace(unit);
 
             // for debugging 2 hardcoded units - player and enemy box
             // ...
             
             instance.InitFightQueue();
+            instance.StartCoroutine(instance.FightLoopCoroutine());
         }
 
         public static HexMap GetMap()
@@ -56,7 +62,30 @@ namespace Core
 
         private void InitFightQueue()
         {
-            throw new System.NotImplementedException();
+            atbScale = new ATBScale(units);
+        }
+
+        private void MakeCurrentUnitMove()
+        {
+            UnitStats unit = atbScale.GetCurrentUnit();
+
+            // do actions with unit:
+            // 1. get controller component
+            // 2. supply it with EndAction callback function
+            // 3. end this function
+        }
+
+        private System.Collections.IEnumerator FightLoopCoroutine()
+        {
+            bool endFight = false;
+            while (!endFight)
+            {
+                MakeCurrentUnitMove();
+
+                yield return new WaitForEndOfFrame();
+            }
+
+            yield return null; 
         }
     }
 }

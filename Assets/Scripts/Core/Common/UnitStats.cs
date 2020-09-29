@@ -9,5 +9,10 @@ namespace Core.Common
         public float manaPoints;
         public float enegry;
         public float defence;
+
+        public float GetFightMoveFrequency()
+        {
+            return 1.0f;
+        }
     }
 }
