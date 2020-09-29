@@ -52,10 +52,10 @@ namespace Core.Fight
             yield return null;
         }
 
-        public void GoToCell(HexCell targetCell)
+        public System.Collections.IEnumerator GoToCell(HexCell targetCell)
         {
             HexPath path = cell.hexMap.ConstructPath(cell, targetCell);
-            motor.MoveWithPath(path);
+            return motor.MoveWithPath(path);
         }
 
         public bool CanBePlacedInCell(HexCell targetCell)

@@ -18,40 +18,16 @@ namespace Core.Fight
                     HexCell cell = HexCellSelector.GetSelectedCell();
                     if (cell.IsFree())
                     {
-                        GoToCell(cell);
+                        yield return StartCoroutine(GoToCell(cell));
                         HexCellSelector.ClearSelection();
                         moveHasEnded = true;
                     }
                 }
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
 
             moveHasEnded = false;
             yield return null;
-        }
-        private void Update()
-        {
-            return;
-            /*
-            if (!motor.isMoving)
-            {
-                HexCell randomCell = null;
-
-                int iteration = 0, maxIterationsCount = 5;
-                while (randomCell == null || randomCell == cell)
-                {
-                    if (iteration++ == maxIterationsCount)
-                    {
-                        Debug.LogError("Max iterations count reached!");
-                        return;
-                    }
-
-                    randomCell = cell.hexMap.GetRandomCell();
-                }
-
-                GoToCell(randomCell);
-            }
-            */
         }
     }
 }

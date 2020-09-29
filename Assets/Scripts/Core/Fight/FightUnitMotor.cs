@@ -22,7 +22,7 @@ namespace Core.Fight
             controller = GetComponent<FightUnitController>();
         }
 
-        public void MoveWithPath(HexPath path)
+        public System.Collections.IEnumerator MoveWithPath(HexPath path)
         {
             if (!isMoving)
             {
@@ -32,7 +32,12 @@ namespace Core.Fight
                 previousPosition = activePath.GetCurrentCell().transform.position;
                 activePath.GoToNextCell();
                 nextPosition = activePath.GetCurrentCell().transform.position;
+
+                while (activePath.IsNotCompleted())
+                    yield return new WaitForEndOfFrame();
             }
+
+            yield return null;
         }
 
         private void OnDrawGizmosSelected()
