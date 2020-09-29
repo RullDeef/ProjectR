@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Core
@@ -16,7 +18,7 @@ namespace Core
         public RTUI RTUI;
         public FightUI fightUI;
 
-        public GamingState gamingState;
+        public GamingState gamingState = GamingState.RealTime;
 
         [SerializeField]
         private Transform player = null;
@@ -25,14 +27,21 @@ namespace Core
 
         private void Awake()
         {
-            instance = this;
-            RTUI = FindObjectOfType<RTUI>();
-            fightUI = FindObjectOfType<FightUI>();
-
-            if (RTUI != null)
-                gamingState = GamingState.RealTime;
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
             else
-                gamingState = GamingState.Fight;
+            {
+                if (instance.RTUI == null)
+                    instance.RTUI = FindObjectOfType<RTUI>();
+                if (instance.fightUI == null)
+                    instance.fightUI = FindObjectOfType<FightUI>();
+
+                Destroy(gameObject);
+                return;
+            }
         }
 
         private void Update()
@@ -94,6 +103,11 @@ namespace Core
             return instance.player;
         }
 
+        internal static void SetPlayer(Transform player)
+        {
+            instance.player = player;
+        }
+
         public void OpenInventory()
         {
             player.GetComponent<RT.Player.RTPlayerController>().DeactivateControlls();
@@ -117,6 +131,19 @@ namespace Core
         {
             RTUI.CloseCraft();
             //player.GetComponent<RT.Player.RTPlayerController>().ActivateControlls();
+        }
+
+        /**
+         *  @brief Инициализирует боевку игрока с врагами, переданными в списке аргументов.
+         *
+         *  Открывает сцену боевки, создает необходимые контроллеры и
+         *  инициализирует очередь ходов.
+         */
+        public static void InitFight(List<Common.UnitStats> units)
+        {
+            instance.gamingState = GamingState.Fight;
+            SceneManager.LoadScene("FightScene");
+            FightManager.InitFight(units);
         }
     }
 }
