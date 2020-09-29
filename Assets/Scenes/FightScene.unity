@@ -886,6 +886,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6452db1a085dc234a9b2a9e058324ff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingUnits:
+  - {fileID: 11400000, guid: ab0715a1101b6e548b5ddbc909576f42, type: 2}
+  - {fileID: 11400000, guid: b5538789a7e2a924c820f8fc3c3d0990, type: 2}
+  playableUnits: []
+  atbScale:
+    inspectUnitsQueue: []
 --- !u!114 &435097816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1935,7 +1941,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1276848374
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2403,7 +2409,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &1507207803
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2457,6 +2463,7 @@ MonoBehaviour:
   shape:
     cells:
     - {x: 0, y: 0, z: 0}
+  stats: {fileID: 0}
 --- !u!114 &1507207808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2470,10 +2477,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
-  activePath:
-    cells: []
-    currentCell: {fileID: 0}
-    currentIndex: 0
   movingSpeed: 5
   isMoving: 0
 --- !u!1 &1517007379

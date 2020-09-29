@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Core.Fight;
 using Core.Common;
+using System.Linq;
 
 namespace Core
 {
@@ -14,7 +15,15 @@ namespace Core
         public MapGenerationParams mapGenerationParams;
         public HexMap currentMap;
 
-        public List<UnitStats> units;
+
+        // for debugging 2 hardcoded units - player and enemy box
+        // first unit must always be player stats!!
+        public List<UnitStats> startingUnits;
+
+
+        public List<Transform> playableUnits;
+
+        [SerializeField]
         public ATBScale atbScale;
 
         private void Awake()
@@ -22,20 +31,19 @@ namespace Core
             instance = this;
 
             // for debugging
-            InitFight(new List<UnitStats>());
+            InitFight(new List<UnitStats>(startingUnits));
         }
 
         public static void InitFight(List<UnitStats> fightingUnits)
         {
-            instance.units = fightingUnits;
+            // instance.startingUnits = fightingUnits;
 
             instance.GenerateMap();
 
-            foreach (UnitStats unit in fightingUnits)
-                instance.PlaceEnemyUnitInRandomPlace(unit);
-
-            // for debugging 2 hardcoded units - player and enemy box
-            // ...
+            // place player unit and enemy units
+            instance.PlacePlayerUnit(fightingUnits[0]);
+            for (int i = 1; i < fightingUnits.Count; i++)
+                instance.PlaceEnemyUnitInRandomPlace(fightingUnits[i]);
             
             instance.InitFightQueue();
             instance.StartCoroutine(instance.FightLoopCoroutine());
@@ -55,24 +63,49 @@ namespace Core
             currentMap = generator.LoadFromScene();
         }
 
+        private void PlacePlayerUnit(UnitStats unitStats)
+        {
+            Transform playableUnit = FightUnitFactory.CreatePlayerUnit(unitStats);
+
+            HexCell cell = currentMap.GetRandomFreeCell();
+            cell.controller = playableUnit.GetComponent<FightUnitController>();
+            playableUnit.GetComponent<FightUnitController>().cell = cell;
+            playableUnit.position = cell.transform.position;
+
+            // add playable to list of playables
+            playableUnits.Add(playableUnit);
+
+            // add it to game manager tracking
+            GameManager.SetPlayer(playableUnit);
+        }
+
         private void PlaceEnemyUnitInRandomPlace(UnitStats unitStats)
         {
-            throw new System.NotImplementedException();
+            Transform playableUnit = FightUnitFactory.CreatePlayableUnit(unitStats);
+
+            HexCell cell = currentMap.GetRandomFreeCell();
+            cell.controller = playableUnit.GetComponent<FightUnitController>();
+            playableUnit.GetComponent<FightUnitController>().cell = cell;
+            playableUnit.position = cell.transform.position;
+            
+            // add playable to list of playables
+            playableUnits.Add(playableUnit);
         }
 
         private void InitFightQueue()
         {
-            atbScale = new ATBScale(units);
+            atbScale = new ATBScale(playableUnits.ConvertAll(playable => playable.GetComponent<FightUnitController>().stats));
         }
 
-        private void MakeCurrentUnitMove()
+        private Coroutine MakeCurrentUnitMove()
         {
-            UnitStats unit = atbScale.GetCurrentUnit();
+            UnitStats unitStats = atbScale.GetCurrentUnitStats();
+            Transform playableUnit = playableUnits.Where(unit => unit.GetComponent<FightUnitController>().stats == unitStats).First();
 
-            // do actions with unit:
-            // 1. get controller component
-            // 2. supply it with EndAction callback function
-            // 3. end this function
+            FightUnitController controller = playableUnit.GetComponent<FightUnitController>();
+
+            Debug.Log("Preparing for unit to move...");
+            return StartCoroutine(controller.MakeMove());
         }
 
         private System.Collections.IEnumerator FightLoopCoroutine()
@@ -80,7 +113,11 @@ namespace Core
             bool endFight = false;
             while (!endFight)
             {
-                MakeCurrentUnitMove();
+                yield return MakeCurrentUnitMove();
+
+                // update ATB scale
+                atbScale.UpdateActiveUnits(playableUnits.ConvertAll(playable => playable.GetComponent<FightUnitController>().stats));
+                atbScale.PropagateScale();
 
                 yield return new WaitForEndOfFrame();
             }

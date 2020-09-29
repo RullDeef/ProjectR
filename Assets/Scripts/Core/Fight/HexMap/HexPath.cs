@@ -4,15 +4,12 @@ using UnityEngine;
 
 namespace Core.Fight
 {
-    [Serializable]
     public class HexPath
     {
         public List<HexCell> cells = new List<HexCell>();
         
-        [SerializeField]
         private HexCell currentCell = null;
 
-        [SerializeField]
         private int currentIndex = -1;
 
         public HexPath(IEnumerable<HexCell> cells)

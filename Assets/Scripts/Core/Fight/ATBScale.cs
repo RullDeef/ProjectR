@@ -5,12 +5,17 @@ using System.Linq;
 
 namespace Core.Fight
 {
+    [System.Serializable]
     public class ATBScale
     {
         private const int size = 5;
 
         private List<UnitStats> activeUnits = new List<UnitStats>();
+
         public Queue<UnitStats> unitsQueue = new Queue<UnitStats>();
+
+        [SerializeField]
+        public List<UnitStats> inspectUnitsQueue = new List<UnitStats>();
 
         // заполняет шкалу при создании 
         public ATBScale(List<UnitStats> units)
@@ -30,12 +35,13 @@ namespace Core.Fight
             activeUnits.AddRange(units);
 
             unitsQueue = new Queue<UnitStats>(unitsQueue.Where(unit => activeUnits.Contains(unit)));
+            inspectUnitsQueue = new List<UnitStats>(unitsQueue);
 
             while (unitsQueue.Count < size)
                 AppendNewUnitMove();
         }
 
-        public UnitStats GetCurrentUnit()
+        public UnitStats GetCurrentUnitStats()
         {
             return unitsQueue.Peek();
         }
@@ -46,6 +52,7 @@ namespace Core.Fight
         public void PropagateScale()
         {
             unitsQueue.Dequeue();
+            inspectUnitsQueue.RemoveAt(0);
             AppendNewUnitMove();
         }
 
@@ -62,6 +69,7 @@ namespace Core.Fight
 
             // add it to queue
             unitsQueue.Enqueue(unit);
+            inspectUnitsQueue.Add(unit);
         }
 
         private UnitStats SelectRandomUnit(float[] probabilities)

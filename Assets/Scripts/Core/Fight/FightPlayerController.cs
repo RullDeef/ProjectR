@@ -1,13 +1,20 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Core.Fight
 {
     public class FightPlayerController : FightUnitController
     {
+        public override IEnumerator MakeMove()
+        {
+            Debug.Log("Your move!");
+
+            yield return null;
+        }
         private void Update()
         {
             return;
-            
+            /*
             if (!motor.isMoving)
             {
                 HexCell randomCell = null;
@@ -26,6 +33,7 @@ namespace Core.Fight
 
                 GoToCell(randomCell);
             }
+            */
         }
     }
 }

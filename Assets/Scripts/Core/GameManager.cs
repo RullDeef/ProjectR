@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -95,6 +96,11 @@ namespace Core
         public static Transform GetPlayer()
         {
             return instance.player;
+        }
+
+        internal static void SetPlayer(Transform player)
+        {
+            instance.player = player;
         }
 
         public void OpenInventory()

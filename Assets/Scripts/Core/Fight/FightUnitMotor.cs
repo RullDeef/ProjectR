@@ -8,7 +8,7 @@ namespace Core.Fight
     public class FightUnitMotor : MonoBehaviour
     {
         public FightUnitController controller;
-        public HexPath activePath;
+        public HexPath activePath = null;
 
         public float movingSpeed = 1.0f; // cells/sec.
         public bool isMoving = false;
@@ -48,7 +48,9 @@ namespace Core.Fight
             if (GameManager.IsPaused())
                 return;
 
-            if (activePath != null && activePath.IsNotCompleted())
+            if (activePath != null)
+                Debug.Log("ADDED PATH!!");
+            else if (activePath != null && activePath.IsNotCompleted())
             {
                 if (time >= 1.0f)
                 {

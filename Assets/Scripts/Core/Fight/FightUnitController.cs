@@ -23,6 +23,8 @@ namespace Core.Fight
 
         protected FightUnitMotor motor;
 
+        public Core.Common.UnitStats stats;
+
         void Awake()
         {
             fsm = new StateMachine();
@@ -34,6 +36,20 @@ namespace Core.Fight
             fsm.AddTransition("going", "wait", () => !motor.isMoving);
 
             fsm.SetActiveState("wait");
+        }
+
+        virtual public System.Collections.IEnumerator MakeMove()
+        {
+            Debug.Log("waiting for move to complete... 0");
+            yield return new WaitForSeconds(1.0f);
+            Debug.Log("waiting for move to complete... 1");
+            yield return new WaitForSeconds(1.0f);
+            Debug.Log("waiting for move to complete... 2");
+            yield return new WaitForSeconds(1.0f);
+            Debug.Log("waiting for move to complete... 3");
+            Debug.Log("move completed!");
+
+            yield return null;
         }
 
         public void GoToCell(HexCell targetCell)

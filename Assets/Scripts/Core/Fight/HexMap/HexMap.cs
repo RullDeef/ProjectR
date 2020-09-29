@@ -15,6 +15,22 @@ namespace Core.Fight
             return cells.ElementAt(UnityEngine.Random.Range(0, cells.Count));
         }
 
+        public HexCell GetRandomFreeCell()
+        {
+            HexCell cell;
+            int iteration = 0, maxIterations = 10;
+            do
+            {
+                cell = GetRandomCell();
+                iteration++;
+            } while (!cell.IsFree() && iteration < maxIterations);
+
+            if (iteration >= maxIterations)
+                Debug.LogError("max iterations reached!");
+
+            return cell;
+        }
+
         public HexPath ConstructPath(HexCell startingCell, HexCell endingCell)
         {
             HashSet<HexCellWrapper> visitedCells = new HashSet<HexCellWrapper>();

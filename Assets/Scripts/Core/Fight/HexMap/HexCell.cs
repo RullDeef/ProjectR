@@ -15,9 +15,14 @@ namespace Core.Fight
         [SerializeField]
         public HexMap hexMap;
         public bool walkable = true; // true if any unit can be placed inside this cell
-
+        public FightUnitController controller = null;
 
         private List<HexCell> neighbors;
+
+        public bool IsFree()
+        {
+            return controller == null;
+        }
 
         public List<HexCell> GetNeighbors()
         {
@@ -29,7 +34,7 @@ namespace Core.Fight
             FindNeighbors();
         }
 
-        void OnDrawGizmosSelected()
+        private void OnDrawGizmosSelected()
         {
             Gizmos.DrawWireSphere(transform.position, 1);
         }
