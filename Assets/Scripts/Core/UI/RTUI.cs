@@ -6,6 +6,7 @@ namespace Core
     {
         public GameObject pauseMenu;
         public GameObject inventoryMenu;
+        public GameObject craftMenu;
 
         public void OpenPauseMenu()
         {
@@ -45,6 +46,21 @@ namespace Core
         public void CloseInventory()
         {
             inventoryMenu.SetActive(false);
+        }
+
+        public bool IsCraftOpen()
+        {
+            return craftMenu.activeSelf;
+        }
+
+        public void OpenCraft()
+        {
+            craftMenu.SetActive(true);
+        }
+
+        public void CloseCraft()
+        {
+            craftMenu.SetActive(false);
         }
     }
 }

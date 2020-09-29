@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Core.Inventory
@@ -29,8 +30,7 @@ namespace Core.Inventory
             if (playerItem != null)
             {
                 playerItem.count++;
-                if (OnItemsUpdateCallback != null)
-                    OnItemsUpdateCallback(playerItem);
+                UpdateItem(playerItem);
             }
             else
             {
@@ -45,17 +45,92 @@ namespace Core.Inventory
             return true;
         }
 
+        public bool AddItem(PlayerItem itemToAdd)
+        {
+            PlayerItem existingPlayerItem = MainInventory.Find(_ => _.item.id == itemToAdd.item.id && _.count < _.item.maxStacks);
+
+            if (existingPlayerItem != null)
+            {
+                int availableSpace = itemToAdd.item.maxStacks - existingPlayerItem.count;
+                if (availableSpace >= itemToAdd.count)
+                {
+                    existingPlayerItem.count += itemToAdd.count;
+                }
+                else // Если места в существующем итеме не хватит
+                {
+                    if (MainInventory.Count >= maxItems) return false;
+
+                    existingPlayerItem.count += availableSpace;
+                    PlayerItem newItem = new PlayerItem(itemToAdd.item, itemToAdd.count - availableSpace);
+                    MainInventory.Add(newItem);
+
+                    if (OnItemsAddCallback != null)
+                        OnItemsAddCallback(newItem);
+                }
+                UpdateItem(existingPlayerItem);
+            }
+            else
+            {
+                if (MainInventory.Count >= maxItems) return false;
+
+                PlayerItem newItem = new PlayerItem(itemToAdd.item, itemToAdd.count);
+                MainInventory.Add(newItem);
+
+                if (OnItemsAddCallback != null)
+                    OnItemsAddCallback(newItem);
+            }
+
+            return true;
+        }
+
+        private void UpdateItem(PlayerItem playerItem)
+        {
+            if (OnItemsUpdateCallback != null)
+                OnItemsUpdateCallback(playerItem);
+        }
+
         public void DeleteItem(PlayerItem playerItem)
         {
-            PlayerItem itemToDelete = MainInventory.Find(item => item.Equals(playerItem));
-            MainInventory.Remove(itemToDelete);
+            MainInventory.Remove(playerItem);
             if (OnItemDeleteCallback != null)
-                OnItemDeleteCallback(itemToDelete);
+                OnItemDeleteCallback(playerItem);
+        }
+
+        private void DeleteItems(List<PlayerItem> itemsToDelete)
+        {
+            PlayerItem findItem;
+            foreach (PlayerItem itemToDelete in itemsToDelete)
+            {
+                findItem = MainInventory.Find(myItem => myItem.item.id == itemToDelete.item.id && myItem.count >= itemToDelete.count);
+                findItem.count -= itemToDelete.count;
+                if (findItem.count == 0)
+                {
+                    DeleteItem(findItem);
+                }
+                else
+                {
+                    UpdateItem(findItem);
+                }
+            }
         }
 
         public List<PlayerItem> GetInventory()
         {
             return MainInventory;
+        }
+
+        public bool Craft(List<PlayerItem> ingredients, PlayerItem result)
+        {
+            // Ищем ингредиенты, если нету хотя бы одного, то не крафтим
+            List<PlayerItem> find = MainInventory.Where(myItem => ingredients.Any(ingredient => myItem.item.id == ingredient.item.id && myItem.count >= ingredient.count)).ToList();
+            if (find.Count >= ingredients.Count) // пока так, если нашлись все предметы
+            {
+                DeleteItems(ingredients);
+                AddItem(result);
+                return true;
+            }
+
+            return false;
         }
     }
 }
