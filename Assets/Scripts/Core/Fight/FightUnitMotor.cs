@@ -48,9 +48,7 @@ namespace Core.Fight
             if (GameManager.IsPaused())
                 return;
 
-            if (activePath != null)
-                Debug.Log("ADDED PATH!!");
-            else if (activePath != null && activePath.IsNotCompleted())
+            if (activePath != null && activePath.IsNotCompleted())
             {
                 if (time >= 1.0f)
                 {

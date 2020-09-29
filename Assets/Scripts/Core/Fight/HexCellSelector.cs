@@ -6,6 +6,8 @@ namespace Core.Fight
 {
     public class HexCellSelector : MonoBehaviour
     {
+        private static HexCellSelector instance = null;
+
         public HexCell selectedCell = null;
         private float maxSelectionDistance = 100.0f;
 
@@ -13,6 +15,26 @@ namespace Core.Fight
         public delegate void OnDeselectCellHandlerTyle();
         public OnSelectCellHandlerType onSelectCellHandler = (HexCell) => { };
         public OnDeselectCellHandlerTyle onDeselectCellHandler = () => { };
+
+        private void Awake()
+        {
+            instance = this;
+        }
+
+        public static bool IsAnyCellSelected()
+        {
+            return instance.selectedCell != null;
+        }
+
+        public static HexCell GetSelectedCell()
+        {
+            return instance.selectedCell;
+        }
+
+        public static void ClearSelection()
+        {
+            instance.selectedCell = null;
+        }
 
         private void OnDrawGizmos()
         {

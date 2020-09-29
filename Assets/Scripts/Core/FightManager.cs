@@ -29,7 +29,10 @@ namespace Core
         private void Awake()
         {
             instance = this;
+        }
 
+        private void Start()
+        {
             // for debugging
             InitFight(new List<UnitStats>(startingUnits));
         }
