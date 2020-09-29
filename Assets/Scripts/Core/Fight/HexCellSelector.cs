@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace Core.Fight
     {
         private static HexCellSelector instance = null;
 
+        public bool selectionEnabled = true;
         public HexCell selectedCell = null;
         private float maxSelectionDistance = 100.0f;
 
@@ -19,6 +21,16 @@ namespace Core.Fight
         private void Awake()
         {
             instance = this;
+        }
+
+        public static void DisableSelection()
+        {
+            instance.selectionEnabled = false;
+        }
+
+        public static void EnableSelection()
+        {
+            instance.selectionEnabled = true;
         }
 
         public static bool IsAnyCellSelected()
@@ -45,7 +57,7 @@ namespace Core.Fight
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (selectionEnabled && Input.GetMouseButtonDown(0))
                 HandleClick();
         }
 

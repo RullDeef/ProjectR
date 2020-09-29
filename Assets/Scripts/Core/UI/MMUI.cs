@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace Core
 {
+    // MMUI stands for Main Menu UI (need renaming though...)
     public class MMUI : MonoBehaviour
     {
         public void StartGame()

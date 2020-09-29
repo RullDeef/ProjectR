@@ -18,7 +18,9 @@ namespace Core.Fight
                     HexCell cell = HexCellSelector.GetSelectedCell();
                     if (cell.IsFree())
                     {
-                        yield return StartCoroutine(GoToCell(cell));
+                        HexCellSelector.DisableSelection();
+                        yield return GoToCell(cell);
+                        HexCellSelector.EnableSelection();
                         HexCellSelector.ClearSelection();
                         moveHasEnded = true;
                     }

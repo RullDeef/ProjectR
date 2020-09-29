@@ -14,5 +14,23 @@ namespace Core.Common
         {
             return 1.0f;
         }
+
+        public override string ToString()
+        {
+            return $"{{{healthPoints},{manaPoints},{enegry},{defence}}}";
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+
+        public override bool Equals(object other)
+        {
+            if (other is UnitStats u)
+                return u.GetHashCode() == GetHashCode();
+            else
+                return false;
+        }
     }
 }

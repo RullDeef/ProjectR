@@ -8,7 +8,7 @@ namespace Core.Fight
     [System.Serializable]
     public class ATBScale
     {
-        private const int size = 5;
+        public static int size = 5;
 
         private List<UnitStats> activeUnits = new List<UnitStats>();
 

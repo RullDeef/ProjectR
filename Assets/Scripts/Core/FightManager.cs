@@ -26,9 +26,13 @@ namespace Core
         [SerializeField]
         public ATBScale atbScale;
 
+        // UI version for atb scale
+        public Core.UI.Fight.ATBScale uiATBScale;
+
         private void Awake()
         {
             instance = this;
+            uiATBScale = FindObjectOfType<Core.UI.Fight.ATBScale>();
         }
 
         private void Start()
@@ -98,6 +102,8 @@ namespace Core
         private void InitFightQueue()
         {
             atbScale = new ATBScale(playableUnits.ConvertAll(playable => playable.GetComponent<FightUnitController>().stats));
+            uiATBScale.InitIconDescriptors(playableUnits);
+            uiATBScale.UpdateIcons(atbScale);
         }
 
         private Coroutine MakeCurrentUnitMove()
@@ -121,6 +127,9 @@ namespace Core
                 // update ATB scale
                 atbScale.UpdateActiveUnits(playableUnits.ConvertAll(playable => playable.GetComponent<FightUnitController>().stats));
                 atbScale.PropagateScale();
+
+                // update UI
+                uiATBScale.UpdateIcons(atbScale);
 
                 yield return new WaitForEndOfFrame();
             }
