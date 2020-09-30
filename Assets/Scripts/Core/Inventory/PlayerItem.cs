@@ -15,6 +15,14 @@ namespace Core.Inventory
             this.count = count;
         }
 
+        public void TryActivateItem()
+        {
+            if (item.type == Type.Active)
+            {
+                PlayerInventory.instance.UseItem(this);
+            }
+        }
+
         public override string ToString()
         {
             return item.title + ": " + item.description + " , " + count;

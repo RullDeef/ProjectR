@@ -7,7 +7,7 @@ using Core.Inventory;
 // TODO: refactor all namespaces. Separate UI from CORE
 namespace UI.Inventory
 {
-    public class InventoryItemRenderer : MonoBehaviour, IPointerDownHandler
+    public class InventoryItemRenderer : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     {
         public int cellsCount;
         public GameObject emptySlot, target;
@@ -94,7 +94,27 @@ namespace UI.Inventory
             UpdateCapacityText();
         }
 
-        void IPointerDownHandler.OnPointerDown(PointerEventData eventData) //клик на итем в инвентаре
+        void IPointerClickHandler.OnPointerClick(PointerEventData eventData) // Клик на итем в инвентаре
+        {
+            currentCell = cells.Find(cel => RectTransformUtility.RectangleContainsScreenPoint(cel.rectTransform, eventData.position));
+            if (currentCell != null)
+            {
+                if (deleteItemButtonPressed)
+                {
+                    messageBoxOnDeleteItem.Show();
+                    return;
+                }
+
+                if (eventData.clickCount >= 2)
+                    currentCell._playerItem.TryActivateItem();
+            }
+            else
+            {
+                SetVoidTarget();
+            }
+        }
+
+        void IPointerDownHandler.OnPointerDown(PointerEventData eventData) // Начало клика на итем
         {
             currentCell = cells.Find(cel => RectTransformUtility.RectangleContainsScreenPoint(cel.rectTransform, eventData.position));
             if (currentCell != null)
@@ -102,9 +122,6 @@ namespace UI.Inventory
                 descriptionText.text = currentCell._playerItem.ToString();
                 target.transform.position = currentCell.transform.position;
                 target.transform.SetParent(currentCell.transform);
-
-                if (deleteItemButtonPressed)
-                    messageBoxOnDeleteItem.Show();
             }
             else
             {

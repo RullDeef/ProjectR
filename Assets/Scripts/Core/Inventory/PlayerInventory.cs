@@ -132,5 +132,21 @@ namespace Core.Inventory
 
             return false;
         }
+
+        public void UseItem(PlayerItem itemUse)
+        {
+            if (itemUse.item.Use())
+            {
+                itemUse.count--;
+                if (itemUse.count == 0)
+                {
+                    DeleteItem(itemUse);
+                }
+                else
+                {
+                    UpdateItem(itemUse);
+                }
+            }
+        }
     }
 }

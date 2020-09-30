@@ -17,3 +17,4 @@ MonoBehaviour:
   description: 
   slotIcon: {fileID: 2800000, guid: e7013564797153c42b6719c83723b232, type: 3}
   maxStacks: 1
+  type: 2
