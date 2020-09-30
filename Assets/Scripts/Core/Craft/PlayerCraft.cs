@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Core.Items;
 using Core.Inventory;
 
 namespace Core.Craft

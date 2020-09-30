@@ -4,7 +4,7 @@ namespace Core.RT
 {
     public class Pickable : Interactable
     {
-        public Inventory.Item item;
+        public Core.Items.Item item;
 
         public override void Interact()
         {         

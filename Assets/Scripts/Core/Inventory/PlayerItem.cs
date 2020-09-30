@@ -1,4 +1,5 @@
 using UnityEngine;
+using Core.Items;
 
 namespace Core.Inventory
 {

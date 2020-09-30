@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Core.Inventory
+namespace Core.Items
 {
     [CreateAssetMenu(fileName = "Item", menuName = "ProjectR/Item", order = 0)]
     public class Item : ScriptableObject
