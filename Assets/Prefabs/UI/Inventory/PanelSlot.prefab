@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 2346652768039687546}
   - component: {fileID: 943239470112477919}
   - component: {fileID: -2422091206989673349}
-  - component: {fileID: 3708899540328428811}
+  - component: {fileID: 1587142078364488125}
   m_Layer: 5
-  m_Name: ItemSlot
+  m_Name: PanelSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38,7 +38,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 50, y: -50}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2346652768039687546
 CanvasRenderer:
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &3708899540328428811
+--- !u!114 &1587142078364488125
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,12 +104,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1231615781149972223}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3630cfed1daf7b46bd4a17d5a388308, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ffd25487bbb27f4795a1dd15dd90a12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  rectTransform: {fileID: 0}
-  lastSibIndex: 0
 --- !u!1 &5083475588327255565
 GameObject:
   m_ObjectHideFlags: 0

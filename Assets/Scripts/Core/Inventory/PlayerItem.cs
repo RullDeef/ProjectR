@@ -20,13 +20,27 @@ namespace Core.Inventory
         {
             if (item.type == Type.Active)
             {
-                PlayerInventory.instance.UseItem(this);
+                //skill?
+                count--;
+                if (count == 0)
+                    PlayerInventory.instance.DeleteItem(this);
+                else
+                    PlayerInventory.instance.UpdateItem(this);
+            }
+            else
+            {
+                Use();
             }
         }
 
         public override string ToString()
         {
             return item.title + ": " + item.description + " , " + count;
+        }
+
+        public void Use()
+        {
+            item.Use(this);
         }
     }
 }

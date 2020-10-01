@@ -1,13 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Core.Inventory;
 
 namespace Core.Items.Armors
 {
-    public class Armor : Item
+    public abstract class Armor : Item
     {
         public float durabilty;
-        public Armor(int id, string title, string description, Texture icon, int maxStacks, Type type, Dictionary<string, int> stats, float durabilty)
-            : base(id, title, description, icon, maxStacks, type, stats)
+        public Armor(Item item, float durabilty)
+            : base(item)
         {
             this.durabilty = durabilty;
         }

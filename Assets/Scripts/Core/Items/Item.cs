@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Core.Items
 {
-    [CreateAssetMenu(fileName = "Item", menuName = "ProjectR/Item", order = 0)]
+    //[CreateAssetMenu(fileName = "Item", menuName = "ProjectR/Item", order = 0)]
     public class Item : ScriptableObject
     {
         public int id;
@@ -26,9 +26,20 @@ namespace Core.Items
             this.stats = stats;
         }
 
-        public virtual bool Use()
+        public Item(Item item)
         {
-            return true;
+            this.id = item.id;
+            this.title = item.title;
+            this.description = item.description;
+            slotIcon = item.slotIcon;
+            this.maxStacks = item.maxStacks;
+            this.type = item.type;
+            this.stats = item.stats;
+        }
+
+        public virtual void Use(Core.Inventory.PlayerItem item)
+        {
+
         }
     }
 

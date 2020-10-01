@@ -22,11 +22,13 @@ namespace UI.Craft
             {
                 tmp = Instantiate(itemSlot, _containerForIngredients);
                 tmp.GetComponent<RawImage>().texture = ingredient.item.slotIcon;
-                tmp.GetComponentInChildren<Text>().text = ingredient.count.ToString();
+                if (ingredient.item.maxStacks != 1)
+                    tmp.GetComponentInChildren<Text>().text = ingredient.count.ToString();
             }
             tmp = Instantiate(itemSlot, _rectResult);
             tmp.GetComponent<RawImage>().texture = _recipe.result.item.slotIcon;
-            tmp.GetComponentInChildren<Text>().text = _recipe.result.count.ToString();
+            if (_recipe.result.item.maxStacks != 1)
+                tmp.GetComponentInChildren<Text>().text = _recipe.result.count.ToString();
         }
     }
 }

@@ -47,8 +47,6 @@ namespace UI.Inventory
                 currentCell.ReturnOnLastPlace();
                 messageBoxOnDeleteItem.Close();
             };
-
-            gameObject.SetActive(false); // временный фикс
         }
 
         private void InitItemCells()

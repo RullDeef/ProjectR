@@ -1,15 +1,22 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Core.Inventory;
 
 namespace Core.Items.Weapons
 {
+    //[CreateAssetMenu(fileName = "Weapon", menuName = "ProjectR/!GAME/Items/Weapons", order = 0)]
     public class Weapon : Item
     {
         public float damage;
-        public Weapon(int id, string title, string description, Texture icon, int maxStacks, Type type, Dictionary<string, int> stats, float damage)
-            : base(id, title, description, icon, maxStacks, type, stats)
+        public Weapon(Item item, float damage)
+            : base(item)
         {
             this.damage = damage;
+        }
+
+        public override void Use(Core.Inventory.PlayerItem item)
+        {
+            PlayerPanel.instance.PutOn(PartOfBody.RightHand, item);
         }
     }
 }

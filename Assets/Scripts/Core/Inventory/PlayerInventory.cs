@@ -14,20 +14,20 @@ namespace Core.Inventory
         public OnItemUpdate OnItemsUpdateCallback;
         public static OnItemDelete OnItemDeleteCallback;
 
-        List<PlayerItem> MainInventory;
+        List<PlayerItem> mainInventory;
         public int maxItems;
         public static PlayerInventory instance;
 
         private void Awake()
         {
             instance = this;
-            MainInventory = new List<PlayerItem>();
+            mainInventory = new List<PlayerItem>();
         }
 
         public bool AddItem(Item item)
         {
             // найти, чтобы положить в стак, если предмет есть и его можно застакать
-            PlayerItem playerItem = MainInventory.Find(_ => _.item.id == item.id && _.count < item.maxStacks);
+            PlayerItem playerItem = mainInventory.Find(_ => _.item.id == item.id && _.count < item.maxStacks);
             if (playerItem != null)
             {
                 playerItem.count++;
@@ -35,10 +35,10 @@ namespace Core.Inventory
             }
             else
             {
-                if (MainInventory.Count >= maxItems) return false;
+                if (mainInventory.Count >= maxItems) return false;
 
                 playerItem = new PlayerItem(item);
-                MainInventory.Add(playerItem);
+                mainInventory.Add(playerItem);
                 if (OnItemsAddCallback != null)
                     OnItemsAddCallback(playerItem);
             }
@@ -48,7 +48,7 @@ namespace Core.Inventory
 
         public bool AddItem(PlayerItem itemToAdd)
         {
-            PlayerItem existingPlayerItem = MainInventory.Find(_ => _.item.id == itemToAdd.item.id && _.count < _.item.maxStacks);
+            PlayerItem existingPlayerItem = mainInventory.Find(_ => _.item.id == itemToAdd.item.id && _.count < _.item.maxStacks);
 
             if (existingPlayerItem != null)
             {
@@ -59,11 +59,11 @@ namespace Core.Inventory
                 }
                 else // Если места в существующем итеме не хватит
                 {
-                    if (MainInventory.Count >= maxItems) return false;
+                    if (mainInventory.Count >= maxItems) return false;
 
                     existingPlayerItem.count += availableSpace;
                     PlayerItem newItem = new PlayerItem(itemToAdd.item, itemToAdd.count - availableSpace);
-                    MainInventory.Add(newItem);
+                    mainInventory.Add(newItem);
 
                     if (OnItemsAddCallback != null)
                         OnItemsAddCallback(newItem);
@@ -72,10 +72,10 @@ namespace Core.Inventory
             }
             else
             {
-                if (MainInventory.Count >= maxItems) return false;
+                if (mainInventory.Count >= maxItems) return false;
 
                 PlayerItem newItem = new PlayerItem(itemToAdd.item, itemToAdd.count);
-                MainInventory.Add(newItem);
+                mainInventory.Add(newItem);
 
                 if (OnItemsAddCallback != null)
                     OnItemsAddCallback(newItem);
@@ -84,7 +84,7 @@ namespace Core.Inventory
             return true;
         }
 
-        private void UpdateItem(PlayerItem playerItem)
+        public void UpdateItem(PlayerItem playerItem)
         {
             if (OnItemsUpdateCallback != null)
                 OnItemsUpdateCallback(playerItem);
@@ -92,7 +92,7 @@ namespace Core.Inventory
 
         public void DeleteItem(PlayerItem playerItem)
         {
-            MainInventory.Remove(playerItem);
+            mainInventory.Remove(playerItem);
             if (OnItemDeleteCallback != null)
                 OnItemDeleteCallback(playerItem);
         }
@@ -102,7 +102,7 @@ namespace Core.Inventory
             PlayerItem findItem;
             foreach (PlayerItem itemToDelete in itemsToDelete)
             {
-                findItem = MainInventory.Find(myItem => myItem.item.id == itemToDelete.item.id && myItem.count >= itemToDelete.count);
+                findItem = mainInventory.Find(myItem => myItem.item.id == itemToDelete.item.id && myItem.count >= itemToDelete.count);
                 findItem.count -= itemToDelete.count;
                 if (findItem.count == 0)
                 {
@@ -117,13 +117,13 @@ namespace Core.Inventory
 
         public List<PlayerItem> GetInventory()
         {
-            return MainInventory;
+            return mainInventory;
         }
 
         public bool Craft(List<PlayerItem> ingredients, PlayerItem result)
         {
             // Ищем ингредиенты, если нету хотя бы одного, то не крафтим
-            List<PlayerItem> find = MainInventory.Where(myItem => ingredients.Any(ingredient => myItem.item.id == ingredient.item.id && myItem.count >= ingredient.count)).ToList();
+            List<PlayerItem> find = mainInventory.Where(myItem => ingredients.Any(ingredient => myItem.item.id == ingredient.item.id && myItem.count >= ingredient.count)).ToList();
             if (find.Count >= ingredients.Count) // пока так, если нашлись все предметы
             {
                 DeleteItems(ingredients);
@@ -134,20 +134,20 @@ namespace Core.Inventory
             return false;
         }
 
-        public void UseItem(PlayerItem itemUse)
-        {
-            if (itemUse.item.Use())
-            {
-                itemUse.count--;
-                if (itemUse.count == 0)
-                {
-                    DeleteItem(itemUse);
-                }
-                else
-                {
-                    UpdateItem(itemUse);
-                }
-            }
-        }
+        // public void UseItem(PlayerItem itemUse)
+        // {
+        //     if (itemUse.Use())
+        //     {
+        //         itemUse.count--;
+        //         if (itemUse.count == 0)
+        //         {
+        //             DeleteItem(itemUse);
+        //         }
+        //         else
+        //         {
+        //             UpdateItem(itemUse);
+        //         }
+        //     }
+        // }
     }
 }

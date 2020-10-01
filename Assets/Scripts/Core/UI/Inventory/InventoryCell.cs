@@ -7,7 +7,7 @@ namespace UI.Inventory
     public class InventoryCell : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         public Core.Inventory.PlayerItem _playerItem;
-        public  RawImage icon;
+        public RawImage icon;
         public RectTransform rectTransform;
 
         private Text currentCountText = null; // Если итем не может быть застакан, это будет null
@@ -22,19 +22,18 @@ namespace UI.Inventory
 
             _dragginParent = draggingParent;
             _originalParent = transform.parent;
+
             icon = GetComponent<RawImage>();
             rectTransform = GetComponent<RectTransform>();
-
-            if (playerItem.item.maxStacks != 1)
-                currentCountText = transform.GetChild(0).GetComponent<Text>();
+            currentCountText = transform.GetChild(0).GetComponent<Text>();
         }
 
         public void Render()
         {
-            name = _playerItem.item.name;
+            name = _playerItem.item.title;
             icon.texture = _playerItem.item.slotIcon;
 
-            if (currentCountText != null)
+            if (_playerItem.item.maxStacks != 1)
                 currentCountText.text = _playerItem.count.ToString();
         }
 
@@ -42,7 +41,7 @@ namespace UI.Inventory
         {
             currentCountText.text = _playerItem.count.ToString();
         }
-        
+
         public void OnBeginDrag(PointerEventData eventData)
         {
             lastSibIndex = transform.GetSiblingIndex();
@@ -61,7 +60,7 @@ namespace UI.Inventory
             Destroy(clone.gameObject);
 
             // если итем после переноса остался в поле инвентаря, то его надо поставить в ближайшую клетку
-            if (RectTransformUtility.RectangleContainsScreenPoint(InventoryItemRenderer.instance.viewPort, eventData.position))
+            if (RectTransformUtility.RectangleContainsScreenPoint(InventoryItemRenderer.instance._draggingParent, eventData.position))
             {
                 int closestIndex = 0;
                 for (int i = 0; i < _originalParent.childCount; i++)

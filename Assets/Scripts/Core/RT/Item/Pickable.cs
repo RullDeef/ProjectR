@@ -7,12 +7,12 @@ namespace Core.RT
         public Core.Items.Item item;
 
         public override void Interact()
-        {         
+        {
             if (RTManager.GetPlayerInventory().AddItem(item))
             {
-                Debug.Log("Picked!");    
+                Debug.Log("Picked! " + item.title);
                 //Destroy(gameObject);
-            }         
+            }
         }
     }
 }
