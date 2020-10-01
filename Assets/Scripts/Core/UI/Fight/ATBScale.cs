@@ -35,6 +35,7 @@ namespace Core.UI.Fight
         private List<ATBIconDescriptor> activeIconDescriptors = new List<ATBIconDescriptor>();
         private List<ATBIconDescriptor> currentIconDescriptors = new List<ATBIconDescriptor>();
 
+        // Иконка для дебага.
         public Texture defaultDescriptorIcon;
 
         public List<GameObject> icons = new List<GameObject>();

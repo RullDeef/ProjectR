@@ -5,19 +5,30 @@ using System.Linq;
 
 namespace Core.Fight
 {
+    /**
+     * @brief Контролирует последовательность ходов участников боя.
+     */
     [System.Serializable]
     public class ATBScale
     {
-        public static int size = 5;
-
+        /// юниты, способные совершать новые ходы
         private List<UnitStats> activeUnits = new List<UnitStats>();
 
+        /// Максимальное кол-во ходов, рассчитываемых наперёд
+        public static int size = 5;
+
+        /// Список ходов юнитов
         public Queue<UnitStats> unitsQueue = new Queue<UnitStats>();
 
+        /// Только для отладки. Отслеживание текущего состояния в инспекторе
         [SerializeField]
         public List<UnitStats> inspectUnitsQueue = new List<UnitStats>();
 
-        // заполняет шкалу при создании 
+        /**
+         * @brief заполняет шкалу при создании.
+         *
+         * @param units Список статов активных юнитов
+         */
         public ATBScale(List<UnitStats> units)
         {
             activeUnits.AddRange(units);
@@ -27,7 +38,9 @@ namespace Core.Fight
         }
 
         /**
-         * Обновляет дэк с участниками боя.
+         * @brief Обновляет дэк с участниками боя.
+         *
+         * @param units Список статов активных юнитов
          */
         public void UpdateActiveUnits(List<UnitStats> units)
         {
@@ -41,13 +54,16 @@ namespace Core.Fight
                 AppendNewUnitMove();
         }
 
+        /**
+         * @brief Возвращает юнита, который сейчас ходит.
+         */
         public UnitStats GetCurrentUnitStats()
         {
             return unitsQueue.Peek();
         }
 
         /**
-         * Удаляет первый элемент на шкале и добавляет новый в конец. 
+         * @brief Удаляет первый элемент на шкале и добавляет новый в конец.
          */
         public void PropagateScale()
         {
@@ -57,6 +73,8 @@ namespace Core.Fight
         }
 
         /**
+         * @brief Генерирует новый ход.
+         *
          * Добавляет в конец очереди ссылку на статы участника боя
          * рандомным способом используя частоты ходов всех участников.
          */
@@ -72,6 +90,9 @@ namespace Core.Fight
             inspectUnitsQueue.Add(unit);
         }
 
+        /**
+         * @brief Выбирает случайного юнита на основе набора вероятностей.
+         */
         private UnitStats SelectRandomUnit(float[] probabilities)
         {
             int randomIndex = -1;
@@ -92,7 +113,7 @@ namespace Core.Fight
         }
 
         /**
-         * Возвращает массив из вероятностей ходов активных участников боя.
+         * @brief Возвращает массив из вероятностей ходов активных участников боя.
          */
         private float[] GetActiveUnitProbabilities()
         {

@@ -6,6 +6,11 @@ using System.Linq;
 
 namespace Core
 {
+    /**
+     * @brief Ответственнен за хранение гексагональной карты, ATB-шкалы и самих юнитов.
+     *
+     * Берет на себя управление игровым процесом при переходе в режим боя.
+     */
     [RequireComponent(typeof(HexMapGenerator))]
     public class FightManager : MonoBehaviour
     {
@@ -16,17 +21,17 @@ namespace Core
         public HexMap currentMap;
 
 
-        // for debugging 2 hardcoded units - player and enemy box
-        // first unit must always be player stats!!
+        /// for debugging 2 hardcoded units - player and enemy box
+        /// first unit must always be player stats!!
         public List<UnitStats> startingUnits;
 
-
+        /// Список активных юнитов.
         public List<Transform> playableUnits;
 
         [SerializeField]
         public ATBScale atbScale;
 
-        // UI version for atb scale
+        /// UI version for atb scale
         public Core.UI.Fight.ATBScale uiATBScale;
 
         private void Awake()
@@ -41,6 +46,11 @@ namespace Core
             InitFight(new List<UnitStats>(startingUnits));
         }
 
+        /**
+         * @brief Инициализирует бой между переданными юнитами.
+         *
+         * Первым в списке должен быть сам игрок(!)
+         */
         public static void InitFight(List<UnitStats> fightingUnits)
         {
             // instance.startingUnits = fightingUnits;
@@ -70,6 +80,9 @@ namespace Core
             currentMap = generator.LoadFromScene();
         }
 
+        /**
+         * @brief Размещает игрока на случайной свободной клетке поля.
+         */
         private void PlacePlayerUnit(UnitStats unitStats)
         {
             Transform playableUnit = FightUnitFactory.CreatePlayerUnit(unitStats);
@@ -86,6 +99,9 @@ namespace Core
             GameManager.SetPlayer(playableUnit);
         }
 
+        /**
+         * @brief Размещает вражеского юнита на случайной свободной клетке поля.
+         */
         private void PlaceEnemyUnitInRandomPlace(UnitStats unitStats)
         {
             Transform playableUnit = FightUnitFactory.CreatePlayableUnit(unitStats);
@@ -106,6 +122,9 @@ namespace Core
             uiATBScale.UpdateIcons(atbScale);
         }
 
+        /**
+         * @brief Передаёт ход следующему игроку и ждёт его окончания.
+         */
         private Coroutine MakeCurrentUnitMove()
         {
             UnitStats unitStats = atbScale.GetCurrentUnitStats();
